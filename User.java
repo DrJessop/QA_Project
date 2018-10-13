@@ -4,10 +4,20 @@ import java.util.HashMap;
 
 public abstract class User {
 	
-	private char state;
-	private HashMap<String, ServiceDetails> map;
+	private char state;				// Stores the privledge access of the user. (Planner or Agent)
+	private HashMap<String, ServiceDetails> map;    // Stores the details of the available service.
 	
 	public void sellTickets(String serviceNumber, String numTickets) {
+		
+		/*
+		 * Function Name: sellTickets
+		 * Functionality: Allow the user to sell tickets from a specified service.
+		 * Parameters: serviceNumber (The identifier of a service),
+		 * numTickets (The number of tickets that are required to be sold)
+		 * Throws: ---------------------
+		 * Returns: --------------------
+		*/
+		
 		try {
 			ServiceDetails ts = this.map.get(serviceNumber);
 			ts.removeTickets(numTickets);
@@ -17,9 +27,30 @@ public abstract class User {
 	}
 	
 	public abstract void cancelTickets();
+		/*
+		 * Function Name: cancelTickets
+		 * Functionality: Allow the user to cancel tickets from a specified service.
+		 * 
+		 * Throws: ---------------------
+		 * Returns: --------------------
+		*/
 	public abstract void changeTickets();
+		/*
+		 * Function Name: changeTickets
+		 * Functionality: Allow the user to change tickets from a specified service.
+		 * 
+		 * Throws: ---------------------
+		 * Returns: --------------------
+		*/
 	
 	public User(String fileName) {
+		
+		/*
+		 * Class Name: User
+		 * Class Functionality: The class represents the set of possible actions that can be performed by the user.
+		 * Class Constructors: 
+		*/
+		
 		this.map = new HashMap<>();
 		/*
 		 * Code here should parse the transaction summary file to come up easily accessible TransactionSummary objects,
