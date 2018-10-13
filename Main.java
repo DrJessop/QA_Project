@@ -1,5 +1,9 @@
 package frontend;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Main {
 	
 	public static char login(Scanner scanner) {
@@ -23,7 +27,7 @@ public class Main {
 		return userState;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		
 		ArrayList<String> transactionMessages = new ArrayList<>();
 		Scanner scanner = new Scanner(System.in);
@@ -38,7 +42,9 @@ public class Main {
 			else
 				user = (Planner) new Planner(fileName);
 			
-			
+			while (true) {
+				
+			}
 		}
 		
 	}

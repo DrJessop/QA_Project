@@ -8,7 +8,6 @@ class TransactionException extends Exception {
 
 public class ServiceDetails {
 	
-	private String transactionCode;
 	private String serviceNumber;
 	private String numTickets;
 	private String destinationNumber;
@@ -19,7 +18,6 @@ public class ServiceDetails {
 	public ServiceDetails(String transactionCode, String serviceNumber, String numTickets,
 							  String destinationNumber, String serviceName, String serviceDate,
 							  boolean inTransactionSummaryFile) {
-		this.transactionCode = transactionCode;
 		this.serviceNumber = serviceNumber;
 		this.numTickets = numTickets;
 		this.destinationNumber = destinationNumber;
@@ -29,15 +27,29 @@ public class ServiceDetails {
 	}
 	
 	protected void removeTickets(String numTicketsToTakeAway) throws TransactionException {
-		int numTickets = Integer.parseInt(numTicketsToTakeAway);
 		int numTicketsCurrently = Integer.parseInt(this.numTickets);
-		if (numTickets > numTicketsCurrently) {
+		int intNumTicketsToTakeAway = Integer.parseInt(numTicketsToTakeAway);
+		if (intNumTicketsToTakeAway > numTicketsCurrently) {
 			throw new TransactionException("Not enough tickets for this service available. "
 					+ "The number of tickets currently available is: "
 					+ this.numTickets + '\n');
 		}
 		else 
-			this.numTickets = Integer.toString(numTicketsCurrently - numTickets);
+			this.numTickets = Integer.toString(numTicketsCurrently - intNumTicketsToTakeAway);
+	}
+
+	protected void addTickets(String numTicketsToAdd) throws TransactionException {
+		int numTicketsCurrently = Integer.parseInt(this.numTickets);
+		int intNumTicketsToAdd = Integer.parseInt(numTicketsToAdd);
+		if ((intNumTicketsToAdd + numTicketsCurrently) > 1000) {
+			throw new TransactionException("The number of tickets cannot exceed 1000 per service. "
+					+ "The number of tickets currently available is: "
+					+ this.numTickets + '\n');
+		}
+		else 
+			this.numTickets = Integer.toString(numTicketsCurrently + intNumTicketsToAdd);	
 	}
 	
+	protected String getNumTickets() { return this.numTickets; }
+	protected String getServiceName() { return this.serviceName; }
 }
