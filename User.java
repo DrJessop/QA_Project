@@ -5,15 +5,14 @@ import java.util.HashMap;
 public abstract class User {
 	
 	private char state;
-	private HashMap<String, TransactionSummary> map;
+	private HashMap<String, ServiceDetails> map;
 	
 	public void sellTickets(String serviceNumber, String numTickets) {
 		try {
-			TransactionSummary ts = this.map.get(serviceNumber);
+			ServiceDetails ts = this.map.get(serviceNumber);
 			ts.removeTickets(numTickets);
-			
 		} catch(Exception e) {
-			
+			e.printStackTrace();
 		}
 	}
 	

@@ -7,6 +7,9 @@ public class Main {
 		while (true) {
 			String fileName = "transactionSummaryFile.txt";
 			
+			/*
+			 * Deals with Logging-in
+			 */
 		}
 		
 	}
