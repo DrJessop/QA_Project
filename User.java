@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 public abstract class User {
 	
-	private char state;				// Stores the privledge access of the user. (Planner or Agent)
 	private HashMap<String, ServiceDetails> map;    // Stores the details of the available service.
 	
 	public void sellTickets(String serviceNumber, String numTickets) {
 		
 		/*
+		 * Function Flow: function sellTickets : String -> String -> null
 		 * Function Name: sellTickets
 		 * Functionality: Allow the user to sell tickets from a specified service.
 		 * Parameters: serviceNumber (The identifier of a service),
@@ -28,6 +28,7 @@ public abstract class User {
 	
 	public abstract void cancelTickets();
 		/*
+		 * Function Flow: function cancelTickets : ---------------------
 		 * Function Name: cancelTickets
 		 * Functionality: Allow the user to cancel tickets from a specified service.
 		 * 
@@ -36,6 +37,7 @@ public abstract class User {
 		*/
 	public abstract void changeTickets();
 		/*
+		 * * Function Flow: function changeTickets : ---------------------
 		 * Function Name: changeTickets
 		 * Functionality: Allow the user to change tickets from a specified service.
 		 * 
