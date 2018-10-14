@@ -27,10 +27,31 @@ public class Main {
 		return userState;
 	}
 	
+	public static void logout(User user) {
+		
+	}
+	
 	public static void acceptTransactions(User user, Scanner scanner) {
+		String input;
 		while (true) {
 			System.out.println("Please enter a transaction: ");
-			
+			input = scanner.nextLine();
+			switch (input) {
+				case "createservice":
+					user.createService();
+				case "deleteservice":
+					user.deleteService();
+				case "changeservice":
+					user.changeservice();
+				case "canceltickets":
+					user.cancelTickets();
+				case "selltickets":
+					user.sellTickets();
+				case "logout":
+					logout(user);
+				default:
+					System.out.println("You have entered in an invalid transaction");
+			}
 		}
 	}
 	
