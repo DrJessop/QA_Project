@@ -1,6 +1,8 @@
 package frontend;
 
 public class Agent extends User {
+	
+	private int numTicketsSoldAlready;
 
 	public Agent(String fileName) {
 		super(fileName);
