@@ -27,6 +27,13 @@ public class Main {
 		return userState;
 	}
 	
+	public static void acceptTransactions(User user, Scanner scanner) {
+		while (true) {
+			System.out.println("Please enter a transaction: ");
+			
+		}
+	}
+	
 	public static void main(String[] args) throws ParseException {
 		
 		ArrayList<String> transactionMessages = new ArrayList<>();
@@ -43,9 +50,7 @@ public class Main {
 			else
 				user = (Planner) new Planner(fileName);
 			
-			while (true) {
-				
-			}
+			acceptTransactions(user, scanner);
 		}
 		
 	}
