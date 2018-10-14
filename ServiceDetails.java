@@ -53,3 +53,4 @@ public class ServiceDetails {
 	protected String getNumTickets() { return this.numTickets; }
 	protected String getServiceName() { return this.serviceName; }
 }
+
