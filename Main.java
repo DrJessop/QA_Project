@@ -27,6 +27,22 @@ public class Main {
 		return userState;
 	}
 	
+	public static void acceptTransactions(User user, Scanner scanner) {
+		String transaction;
+		while (true) {
+			System.out.println("Please enter a valid transaction: ");
+			transaction = scanner.nextLine();
+			switch (transaction) {
+				case "createservice": user.createService();
+				case "deleteservice": user.deleteService();
+				case "selltickets": user.sellTickets();
+				case "changetickets": user.changeTickets();
+				case "canceltickets": user.cancelTickets();
+				case "logout": logout(user);
+				default: System.out.print("You have entered an invalid transaction. ");   
+		}
+	}
+	
 	public static void main(String[] args) throws ParseException {
 		
 		ArrayList<String> transactionMessages = new ArrayList<>();
