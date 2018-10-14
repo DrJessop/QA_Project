@@ -33,9 +33,10 @@ public class Main {
 		Scanner scanner = new Scanner(System.in);
 		String fileName = "transactionSummaryFile.txt";
 		User user;
-		while (true) {
+		char userState;
+		while (true) { //Here so that if they log out, they are brought back to the log in screen
 			
-			char userState = login(scanner);
+			userState = login(scanner);
 			
 			if (userState == 'a') 
 				user = (Agent) new Agent(fileName);
