@@ -30,7 +30,6 @@ public class Agent extends User {
 	@Override
 	public void cancelTickets(String serviceNumber, String numTickets) throws TransactionException {
 		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -44,8 +43,7 @@ public class Agent extends User {
 
 	@Override
 	public void deleteService(String serviceNumber, String serviceName) throws TransactionException {
-		throw new TransactionException("Permission denied");
-		
+		throw new TransactionException("Permission denied");	
 	}
 
 }
