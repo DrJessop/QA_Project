@@ -27,10 +27,13 @@ public class Main {
 		return userState;
 	}
 	
-	public static
+	public static void writeToTransactionSummaryFile(User user) {
+	}
+	
 	public static void acceptTransactions(User user, Scanner scanner) {
 		String transaction;
-		while (true) {
+		boolean stillLoggedIn = true;
+		while (stillLoggedIn) {
 			System.out.println("Please enter a valid transaction: ");
 			transaction = scanner.nextLine();
 			switch (transaction) {
@@ -50,7 +53,8 @@ public class Main {
 					user.cancelTickets();
 					break;
 				case "logout": 
-					logout(user);
+					writeToTransactionSummaryFile(user);
+					stillLoggedIn = false;
 					break;
 				default: System.out.print("You have entered an invalid transaction. ");   
 		}
