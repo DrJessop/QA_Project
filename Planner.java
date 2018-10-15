@@ -16,8 +16,8 @@ public class Planner extends User {
 		 * Function Flow: function checkDate : String -> void
 		 * Function Name: checkDate
 		 * Functionality: Create a service.
-		 * Parameters: None
-		 * Throws: userInput (User Input that should be a date)
+		 * Parameters: userInput (User Input that should be a date)
+		 * Throws: TransactionException (Raised when service number is not found)
 		 * Returns: None
 		*/
 		try {
@@ -37,23 +37,53 @@ public class Planner extends User {
 	}
 	
 	public void createService() throws TransactionException {
+		/*
+		 * Function Flow: function createService : void -> void
+		 * Function Name: createService
+		 * Functionality: Create a service.
+		 * Parameters: None
+		 * Throws: TransactionException (Raised when service number is not found)
+		 * Returns: None
+		*/
+		String serviceNumber = "";					// Store the user input
+		String date = "";
+		String name = "";
+		boolean isGood = true;					// Make sure there are no non-alphanumeric numbers
 		
-		/* 
-		 * Finish date checker and name checker
-		 */
-		if (serviceNumber.length() != 5) {
-			throw new TransactionException("Invalid Input: The service number is not of length five.");
-		} else if (serviceNumber.charAt(0) == '0') {
-			throw new TransactionException("Invalid Input: The first number in the service number cannot equal 0.");
-		}
-		if (this.map.containsKey(serviceNumber))
+		serviceNumber = getUserInput("Please enter a valid service number: ");
+		if ((serviceNumber.length() != 5) || (serviceNumber.charAt(0) == '0')) {
+			throw new TransactionException("Invalid Input: The service number is not valid.");
+		} else if (this.map.containsKey(serviceNumber))
 			throw new TransactionException("Service number already exists");
-		try {
-			Integer.parseInt(serviceNumber);
-		} catch (NumberFormatException e) {
-			throw new TransactionException("The service number you entered is not actually a number");
-		}
-		
+		else {
+			try {
+				Integer.parseInt(serviceNumber);
+				date = getUserInput("Please enter a date: ");				
+				try {
+					checkDate(date);
+					name = getUserInput("Please enter a name: ");     // Check to make sure the name is valid
+					if ((name.length() < 3) || (name.length() > 39) || 
+						(name.charAt(0) == ' ') || (name.charAt(name.length() - 1) == ' ')) {
+						for (int i = 0; i < name.length(); i++) {
+							if(!Character.isLetterOrDigit(name.charAt(i))) {
+								isGood = false;
+							}
+						}
+					}
+					if (isGood) {			// Add the service to the map
+						ServiceDetails sd = new ServiceDetails(serviceNumber, "0", "0", name, date, true);	
+						map.put(serviceNumber, sd);
+						System.out.println("The service was added to the registry");
+					} else {
+						System.out.println("The entry for the name is not valid.");
+					}
+				} catch (TransactionException e) {
+					System.out.println("The date you have entered is not valid.");
+				}
+			} catch (NumberFormatException e) {
+				System.out.println("The service number you have entered is not a number.");
+			}
+		}		
 	}
 	
 	public void deleteService() throws TransactionException {

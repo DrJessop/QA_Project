@@ -80,8 +80,8 @@ public abstract class User {
 		}		
 	}
 	
-	public abstract int cancelTickets() throws TransactionException;
-	public abstract int changeTickets() throws TransactionException;
+	public abstract int cancelTickets(int ticketsAlreadyCancelled) throws TransactionException;
+	public abstract int changeTickets(int ticketsAlreadyChanged) throws TransactionException;
 	public abstract void createService() throws TransactionException;
 	public abstract void deleteService() throws TransactionException;
 	
