@@ -1,89 +1,145 @@
 package frontend;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner; 
 
 public abstract class User {
 	
-	private HashMap<String, ServiceDetails> map;
+	protected HashMap<String, Boolean> validServiceMap;
 	
-	public User(String fileName) {
-		this.map = new HashMap<>();
+	public User(String validServices) {
 		/*
-		 * Code here should parse the transaction summary file to come up easily accessible TransactionSummary objects,
-		 * should set the flag inTransactionSummaryFile to true since these transactions belong to older sessions
+		 * abstract class User
+		 * Functionality: This class acts as a driver for the agent and planner classes. 
+		 * Parameters
+		 * 	String validServices: The string with the name of the valid services file including the '.txt' extension
 		 */
-		
+		this.validServiceMap = new HashMap<>();
+		try (BufferedReader br = new BufferedReader(new FileReader(validServices))) {
+			String line;
+			while (!(line = br.readLine()).equals("00000")) 
+				this.validServiceMap.put(line, true);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
 	}
 	
-	protected ServiceDetails getService(String serviceNumber) throws TransactionException {
+	protected static void writeToTransactionSummaryFile(FileWriter writer, String transaction) throws IOException {
 		/*
-		 * Function Flow: function getService : String -> this.map.get(serviceNumber)
-		 * Function Name: getService
-		 * Functionality: Retrieve the Service information.
-		 * Parameters: serviceNumber (The identifier of a service)
-		 * Throws: TransactionException (Raised when service number is not found)
-		 * Returns: this.map.get(serviceNumber) (Hashmap element)
-		*/
-		if (!this.map.containsKey(serviceNumber)) throw new TransactionException("This service does not exist\n");
-		return this.map.get(serviceNumber);
+		 * function writeToTransactionSummaryFile: ArrayList<String> -> String -> null
+		 * Functionality: Writes out all of the transactions to 
+		 * Parameters
+		 * 	Scanner scanner: Accepts the user's input
+		 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+		 */
+		writer.write(transaction);
 	}
 	
-	protected String getUserInput(String message) {
+	protected boolean validService(String serviceNumber) {
 		/*
-		 * Function Flow: function getUserInput : String -> scan.next()
-		 * Function Name: getUserInput
-		 * Functionality: Get the user Input.
-		 * Parameters: message (Display what the user is to see)
-		 * Throws: -----
-		 * Returns: scan.next()
+		 * method validService: String -> boolean
+		 * Functionality
+		 * 	Allows the front end to know whether a service that is being mentioned already exists in the valid services file
+		 * Parameters
+		 * 	String serviceNumber: The service number we would like to check exists in the valid services file
+		 * Returns
+		 * 	Whether the service number corresponds to a valid service or not
+		 */
+		if (!this.validServiceMap.containsKey(serviceNumber)) return false;
+		return true;
+	}
+	
+	protected String getUserInput(String message, Scanner scanner) {
+		/*
+		 * method getUserInput : String -> String
+		 * Functionality: Get the user input
+		 * Parameters
+		 * 	String message: Display what the user is to see
+		 * 	Scanner scanner: Accepts the user's input 
+		 * Returns user input
 		*/
-		Scanner scan = new Scanner(System.in);
 		System.out.println(message);
-		return scan.next();
+		return scanner.nextLine();
 	}
 	
-	protected void sellTickets() {
+	
+	
+	protected void logout(FileWriter toTransactionSummaryFile) throws IOException {
+		writeToTransactionSummaryFile(toTransactionSummaryFile, "EOS 00000 0 00000 **** 0\n");
+	}
+	
+	protected void sellTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
 		
 		/*
-		 * Function Flow: function sellTickets : String -> String -> null
-		 * Function Name: sellTickets
+		 * method sellTickets : Scanner -> ArrayList<String> -> null
 		 * Functionality: Allow the user to sell tickets from a specified service.
-		 * Parameters: None
-		 * Throws: TransactionException (Raised when incorrect input is used)
-		 * Returns: void
-		*/
-		String message = "";					// Store the user input
-		ServiceDetails sd = null;				// Used to change the Service Detail
+		 * Parameters
+		 * 	Scanner scanner: Accepts the user's input
+		 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+		*/					
+		String serviceNumber = getUserInput("Please enter a valid service number:", scanner); // Store the user input
 		
-		message = getUserInput("Please enter a valid service number:");
-		try {									// See if the transaction code exists and handle invalid input
-			 sd = getService(message);
-			 message = getUserInput("Please enter a number of tickets to sell: ");
-				try {								// Check for valid input and kill transaction if input is not valid
-					int ticketNumber = 0;			
-					ticketNumber = Integer.parseInt(message);
-					if (ticketNumber < 0) {
-						System.out.println("Invalid Input: The ticket quantity you have entered is less than 0.");
-					}
-					try {
-						sd.addTickets(message);
-						System.out.println("The transaction was successful");			// Notify user of successful transaction.
-					} catch (TransactionException e) {
-						System.out.println("Unable to sell tickets");
-					}
-				} catch (NumberFormatException e) {
-					System.out.println("Invalid Input: The number of tickets you have entered is not a string.");
-				}
-		} catch (TransactionException e){
-		    System.out.print("The service does not exist.");
-		}		
+		if (!this.validService(serviceNumber)) {
+			System.out.println("This service number does not exist");
+			return;
+		}
+		String numTicketsToSell = getUserInput("Please enter a number of tickets to sell: ", scanner);
+		try {								// Check for valid input and kill transaction if input is not valid
+			int ticketNumber = Integer.parseInt(numTicketsToSell);
+			if (ticketNumber < 0) 
+				System.out.println("Invalid Input: The ticket quantity you have entered is less than 0.");
+			writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("SEL %s %s 00000 **** 0\n", serviceNumber, numTicketsToSell));
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid Input: The number of tickets you have entered is not a string.");
+		}
 	}
 	
-	public abstract int cancelTickets(int ticketsAlreadyCancelled) throws TransactionException;
-	public abstract int changeTickets(int ticketsAlreadyChanged) throws TransactionException;
-	public abstract void createService() throws TransactionException;
-	public abstract void deleteService() throws TransactionException;
+	/*
+	 * Abstract methods that drive the Planner and Agent classes
+	 */
+	
+	/*
+	 * method cancelTickets: Scanner -> ArrayList<String> -> null
+	 * Functionality: Allows the user to cancel a certain amount of tickets for a service
+	 * Parameters
+	 * 	Scanner scanner: Accepts the user's input
+	 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+	 */
+	protected abstract void cancelTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
+	
+	/*
+	 * abstract method changeTickets: Scanner -> ArrayList<String> -> null
+	 * Functionality: Allows the user to change a certain amount of tickets to a different type of service
+	 * Parameters
+	 * 	Scanner scanner: Accepts the user's input
+	 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+	 */
+	protected abstract void changeTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
+	
+	/*
+	 * abstract method createService: Scanner -> ArrayList<String> -> null
+	 * Functionality: Allows the user to create a service in planner mode, will print out permission denied for agents
+	 * Parameters
+	 * 	Scanner scanner: Accepts the user's input
+	 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+	 */
+	protected abstract void createService(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
+	
+	/*
+	 * abstract method deleteService: Scanner -> ArrayList<String> -> null
+	 * Functionality: Allows planners to delete service, will print out permission denied for agents
+	 * Parameters
+	 * 	Scanner scanner: Accepts the user's input
+	 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+	 */
+	protected abstract void deleteService(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
 	
 
 }

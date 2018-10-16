@@ -1,205 +1,182 @@
 package frontend;
 
-import java.util.HashMap;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class Planner extends User {
-	
-	private HashMap<String, ServiceDetails> map;
 
-	public Planner(String fileName) {
-		super(fileName);
-		// TODO Auto-generated constructor stub
+	public Planner(String validServices) {
+		/* class Planner
+		 * Functionality: This class has privileged planner transaction methods, and does not have as many constraints as the Agent class
+		 * Parameters
+		 * 	String validServices: The string with the name of the valid services file including the '.txt' extension
+		 */
+		super(validServices);
 	}
 	
-	private void checkDate(String userInput) throws TransactionException {
+	private int checkDate(String userInput) {
 		/*
-		 * Function Flow: function checkDate : String -> void
-		 * Function Name: checkDate
-		 * Functionality: Create a service.
-		 * Parameters: userInput (User Input that should be a date)
-		 * Throws: TransactionException (Raised when service number is not found)
-		 * Returns: None
+		 * method checkDate : String -> int
+		 * Functionality: Checks that a given date was correctly entered
+		 * Parameters
+		 * 	String userInput: User input that should be a valid date
+		   Returns -1 if in invalid, else 1
 		*/
 		try {
 			Integer.parseInt(userInput);
 		} catch (NumberFormatException e) {
-			throw new TransactionException("The date you entered contains non-number variables.");
+			System.out.println("The date you entered contains non-number variables.");
+			return -1;
 		}
 		if (userInput.length() != 8) {
-			throw new TransactionException("The date you entered is not of length 8.");
+			System.out.println("The date you entered is not of length 8.");
+			return -1;
 		} else if ((Integer.parseInt(userInput.substring(0,4)) < 1980) || (Integer.parseInt(userInput.substring(0,4)) > 2999)) {
-			throw new TransactionException("The year is invalid.");
+			System.out.println("The year is invalid.");
+			return -1;
 		} else if ((Integer.parseInt(userInput.substring(5,6)) < 1) || (Integer.parseInt(userInput.substring(5,6)) > 12)) {
-			throw new TransactionException("The month is invalid.");
+			System.out.println("The month is invalid.");
+			return -1;
 		} else if ((Integer.parseInt(userInput.substring(7,8)) < 1) || (Integer.parseInt(userInput.substring(7,8)) > 31)) {
-			throw new TransactionException("The day is invalid.");
+			System.out.println("The day is invalid.");
+			return -1;
 		}
+		return 1;
 	}
 	
-	public void createService() throws TransactionException {
+	protected void createService(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
 		/*
-		 * Function Flow: function createService : void -> void
-		 * Function Name: createService
-		 * Functionality: Create a service.
-		 * Parameters: None
-		 * Throws: TransactionException (Raised when service number is not found)
-		 * Returns: None
+		 * method createService : Scanner -> FileWriter -> null
+		 * Functionality: Creates a service
+		 * Parameters
+		 * 	Scanner scanner: Accepts the user's input
+		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 		*/
-		String serviceNumber = "";					// Store the user input
-		String date = "";
-		String name = "";
+							
+		String date ;
+		String name;
 		boolean isGood = true;					// Make sure there are no non-alphanumeric numbers
+		String serviceNumber = getUserInput("Please enter a valid service number: ", scanner); // Store the user input
 		
-		serviceNumber = getUserInput("Please enter a valid service number: ");
 		if ((serviceNumber.length() != 5) || (serviceNumber.charAt(0) == '0')) {
-			throw new TransactionException("Invalid Input: The service number is not valid.");
-		} else if (this.map.containsKey(serviceNumber))
-			throw new TransactionException("Service number already exists");
-		else {
-			try {
-				Integer.parseInt(serviceNumber);
-				date = getUserInput("Please enter a date: ");				
-				try {
-					checkDate(date);
-					name = getUserInput("Please enter a name: ");     // Check to make sure the name is valid
-					if ((name.length() < 3) || (name.length() > 39) || 
-						(name.charAt(0) == ' ') || (name.charAt(name.length() - 1) == ' ')) {
-						for (int i = 0; i < name.length(); i++) {
-							if(!Character.isLetterOrDigit(name.charAt(i))) {
-								isGood = false;
-							}
-						}
-					}
-					if (isGood) {			// Add the service to the map
-						ServiceDetails sd = new ServiceDetails(serviceNumber, "0", "0", name, date, true);	
-						map.put(serviceNumber, sd);
-						System.out.println("The service was added to the registry");
-					} else {
-						System.out.println("The entry for the name is not valid.");
-					}
-				} catch (TransactionException e) {
-					System.out.println("The date you have entered is not valid.");
+			System.out.println("Invalid Input: The service number is not valid.");
+			return;
+		} else if (this.validService(serviceNumber)) {
+			System.out.println("Service number already exists");
+			return;
+		} 
+		try {
+			Integer.parseInt(serviceNumber);
+			date = getUserInput("Please enter a date: ", scanner);	
+			if (checkDate(date) == -1) return;
+			name = getUserInput("Please enter a name: ", scanner);     // Check to make sure the name is valid
+			if ((name.length() < 3) || (name.length() > 39) || 
+				(name.charAt(0) == ' ') || (name.charAt(name.length() - 1) == ' ')) {
+				for (int i = 0; i < name.length(); i++) {
+					if(!Character.isLetterOrDigit(name.charAt(i))) 
+						isGood = false;
 				}
-			} catch (NumberFormatException e) {
-				System.out.println("The service number you have entered is not a number.");
 			}
-		}		
-	}
-	
-	public void deleteService() throws TransactionException {
-		/*
-		 * Function Flow: function deleteService : void -> void
-		 * Function Name: deleteService
-		 * Functionality: Delete a service.
-		 * Parameters: None
-		 * Throws: TransactionException (Raised when service number is not found)
-		 * Returns: None
-		*/
-		String message = "";					// Store the user input
-		ServiceDetails sd = null;				// Used to change the Service Detail
-		
-		message = getUserInput("Please enter a valid service number: ");
-		try {									// See if the transaction code exists and handle invalid input
-			sd = this.getService(message);
-			message = getUserInput("Please enter the name of the service: ");
-			if (!sd.getServiceName().equals(message))
-				System.out.println(String.format("The service name you supplied does not" + 
-						" correspond to the " + "actual service name: %s", sd.getServiceName()));
-			else {
-				this.map.remove(message);
-				System.out.println("The service was successfully removed.");
-			}
-		} catch (TransactionException e) {
-		    System.out.print("The service does not exist.");
+			if (isGood) {			// Add the service to the map
+				writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CRE %s 0000 00000 %s %s\n", serviceNumber, name, date));
+				System.out.println("The service was added to the registry");
+				return;
+			} else 
+				System.out.println("The entry for the name is not valid.");
+		} catch (NumberFormatException e) {
+			System.out.println("The service number you have entered is not a number.");
 		}
-	}
-
-	@Override
-	public int cancelTickets(int ticketsAlreadyCancelled) throws TransactionException {
+	}		
+	
+	protected void deleteService(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
 		/*
-		 * Function Flow: function cancelTickets : int -> int
-		 * Function Name: cancelTickets
-		 * Functionality: Cancel tickets within a service.
-		 * Parameters: ticketsAlreadyCancelled (Tickets already cancelled in the session)
-		 * Throws: TransactionException (Raised when service number is not found)
-		 * Returns: ticketsCancelled (Number of tickets that were cancelled in the transaction)
+		 * method deleteService : Scanner -> FileWriter 
+		 * Functionality: Deletes a service
+		 * Parameters
+		 * 	Scanner scanner: Accepts the user's input
+		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 		*/
-		String message = "";					// Store the user input
-		ServiceDetails sd = null;				// Used to change the Service Detail
-		
-		message = getUserInput("Please enter a valid service number:");
-		try {									// See if the transaction code exists and handle invalid input
-			 sd = getService(message);
-			 message = getUserInput("Please enter the number of tickets to cancel: ");
-				try {								// Check for valid input and kill transaction if input is not valid
-					int numOfTickets = 0;			
-					numOfTickets = Integer.parseInt(message);
-					if (numOfTickets < 0) {     	// Ensure the ticket amount is within the limit
-						System.out.println("Invalid Input: The ticket quantity you have entered is not greater than 0.");
-					} 
-					try {
-						sd.removeTickets(message);
-						System.out.println("The transaction was successful");			// Notify user of successful transaction.
-						return numOfTickets;
-					} catch (TransactionException e) {
-						System.out.println("Unable to sell tickets");
-					}
-				} catch (NumberFormatException e) {
-					System.out.println("Invalid Input: The number of tickets you have entered is not a string.");
-				}
-		} catch (TransactionException e) {
-		    System.out.print("The service does not exist.");
-		}				
-		return -1;				// If Program gets here, then the transaction failed
+		String serviceNumber;					// Store the user input
+		String name;
+		serviceNumber = getUserInput("Please enter a valid service number: ", scanner);
+		if (!this.validService(serviceNumber)) {
+			System.out.println("This service is not in the valid services file");
+			return;
+		}
+		name = getUserInput("Please enter the name of the service: ", scanner);
+		writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("DEL %s 0 00000 %s 0\n", serviceNumber, name));
+		System.out.println("The service was successfully removed.");
 	}
 
 	@Override
-	public int changeTickets(int ticketsAlreadyChanged) throws TransactionException {
+	protected void cancelTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
 		/*
-		 * Function Flow: function getService : int -> int
-		 * Function Name: changeTickets
-		 * Functionality: Change the tickets between the service.
-		 * Parameters: None
-		 * Throws: TransactionException (Raised when service number is not found)
-		 * Returns: ticketsChanged (Number of tickets that were changed)
-		*/	
-		String message = "";					// Store the user input
-		ServiceDetails sd1 = null;				// Used to change the Service Detail
-		ServiceDetails sd2 = null;				// Used to change the Service Detail
+		 * method cancelTickets : Scanner -> FileWriter -> null
+		 * Functionality: Cancels tickets for a given service
+		 * Parameters
+		 * 	Scanner scanner: Accepts the user's input
+		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
+		 */				
+		String serviceNumber = getUserInput("Please enter a valid service number:", scanner); // Store the user input
+										// See if the transaction code exists and handle invalid input
+		if (!this.validService(serviceNumber)) {
+			System.out.println("This service number is not in the valid services file");
+			return;
+		}
+		String numTicketsToCancel = getUserInput("Please enter the number of tickets to cancel: ", scanner);
+		try {								// Check for valid input and kill transaction if input is not valid
+			int numOfTickets = Integer.parseInt(numTicketsToCancel);
+			if (numOfTickets < 0 || numOfTickets > 1000) {     	// Ensure the ticket amount is within the limit
+				System.out.println("Invalid Input: The ticket quantity you have entered is not valid.");
+				return;
+			} 
+			writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CAN %s %s 00000 **** 0\n", serviceNumber, numTicketsToCancel));
+			System.out.println("The transaction was successful");			// Notify user of successful transaction.
+			return;
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid Input: The number of tickets you have entered is not a string.");
+		}			
+		return;				// If Program gets here, then the transaction failed
+	}
+
+	@Override
+	protected void changeTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
+		/*
+		 * method getService : Scanner -> FileWriter
+		 * Functionality: Changes the tickets between the service
+		 * Parameters
+		 * 	Scanner scanner: Accepts the user's input
+		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
+		*/						
 		
-		message = getUserInput("Please enter a valid service number:");
-		try {									// See if the transaction code exists and handle invalid input
-			 sd1 = getService(message);
-			 message = getUserInput("Please enter another service valid number: ");
-			 sd2 = getService(message);
-			 message = getUserInput("Please enter the number of tickets to cancel: ");
-				try {								// Check for valid input and kill transaction if input is not valid
-					int numOfTickets = 0;			
-					numOfTickets = Integer.parseInt(message);
-					if (numOfTickets < 0) {        // Ensure the ticket amount is within the limit
-						System.out.println("Invalid Input: The ticket quantity you have entered is not greater than 0.");
-					} 
-					try {
-						int numTicketsForFirstService = Integer.parseInt(sd1.getNumTickets());
-						int numTicketsForSecondService = Integer.parseInt(sd2.getNumTickets());
-						if ((numOfTickets > numTicketsForFirstService) || (numOfTickets + numTicketsForSecondService > 1000)) {
-							System.out.println(String.format("Unable to move from the first service,"+ " containing %d, into the second "
-									+ "service, containing %d", numOfTickets, numTicketsForFirstService, numTicketsForSecondService));
-						}
-						sd1.removeTickets(Integer.toString(numOfTickets));
-						sd2.addTickets(Integer.toString(numOfTickets));
-						System.out.println("The transaction was successful");			// Notify user of successful transaction.
-						return numOfTickets;
-					} catch (TransactionException e) {
-						System.out.println("Unable to sell tickets");
-					}
-				} catch (NumberFormatException e) {
-					System.out.println("Invalid Input: The number of tickets you have entered is not a string.");
-				}
-		} catch (TransactionException e) {
-		    System.out.print("The service does not exist.");
-		}				
-		return -1;				// If Program gets here, then the transaction failed
+		String serviceNumber = getUserInput("Please enter a valid service number:", scanner); // Store the user input
+		if (!this.validService(serviceNumber)) {
+			System.out.println("This service is not in the valid services file");
+			return;
+		}
+		String serviceNumber2;
+		String numTicketsToCancel;
+		serviceNumber2 = getUserInput("Please enter another service valid number: ", scanner);
+		if (!this.validService(serviceNumber2)) {
+			System.out.println("This service is not in the valid services file");
+			return;
+		}
+		numTicketsToCancel = getUserInput("Please enter the number of tickets to cancel: ", scanner);
+		try {								// Check for valid input and kill transaction if input is not valid
+			int numOfTickets = 0;			
+			numOfTickets = Integer.parseInt(numTicketsToCancel);
+			if (numOfTickets < 1 || numOfTickets > 1000) {    // Ensure the ticket amount is within the limit
+				System.out.println("Invalid Input: The ticket quantity you have entered is not valid.");
+				return;
+			}
+			writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CHG %s %s %s **** 0\n", serviceNumber, numTicketsToCancel, serviceNumber2));
+			System.out.println("The transaction was successful");			// Notify user of successful transaction.
+			return;
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid Input: The number of tickets you have entered is not a string.");
+		}			
+		return;				// If Program gets here, then the transaction failed
 	}
 
 }

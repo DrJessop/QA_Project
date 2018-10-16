@@ -1,12 +1,19 @@
 package frontend;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 	
 	public static char login(Scanner scanner) {
+		/*
+		 * function login: Scanner -> null
+		 * Functionality: Isolates the login logic away from the logic when in the actual program
+		 * Parameters
+		 * 	Scanner scanner: Accepts the user's input
+		 */
 		boolean loggedIn = false;
 		String input;
 		char userState = '\0';
@@ -27,10 +34,13 @@ public class Main {
 		return userState;
 	}
 	
-	public static void writeToTransactionSummaryFile(User user) {
-	}
-	
-	public static void acceptTransactions(User user, Scanner scanner) {
+	public static void acceptTransactions(User user, Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
+		/*
+		 * function login: Scanner -> null
+		 * Functionality: Isolates the login logic away from the logic when in the actual program
+		 * Parameters
+		 * 	Scanner scanner: Accepts the user's input
+		 */
 		String transaction;
 		boolean stillLoggedIn = true;
 		while (stillLoggedIn) {
@@ -38,46 +48,46 @@ public class Main {
 			transaction = scanner.nextLine();
 			switch (transaction) {
 				case "createservice": 
-					user.createService();
+					user.createService(scanner, toTransactionSummaryFile);
 					break;
 				case "deleteservice": 
-					user.deleteService();
+					user.deleteService(scanner, toTransactionSummaryFile);
 					break;
 				case "selltickets": 
-					user.sellTickets();
+					user.sellTickets(scanner, toTransactionSummaryFile);
 					break;
 				case "changetickets":
-					user.changeTickets();
+					user.changeTickets(scanner, toTransactionSummaryFile);
 					break;
 				case "canceltickets":
-					user.cancelTickets();
+					user.cancelTickets(scanner, toTransactionSummaryFile);
 					break;
 				case "logout": 
-					writeToTransactionSummaryFile(user);
+					user.logout(toTransactionSummaryFile);
 					stillLoggedIn = false;
 					break;
 				default: System.out.print("You have entered an invalid transaction. ");   
+			}
 		}
 	}
 	
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException, IOException {
 		
-		ArrayList<String> transactionMessages = new ArrayList<>();
 		Scanner scanner = new Scanner(System.in);
-		String fileName = "transactionSummaryFile.txt";
+		String validServices = "validServices.txt";
 		User user;
+		FileWriter toTransactionSummaryFile;
 		while (true) {
 			
 			char userState = login(scanner);
 			
 			if (userState == 'a') 
-				user = (Agent) new Agent(fileName);
+				user = (Agent) new Agent(validServices);
 			else
-				user = (Planner) new Planner(fileName);
-			
-			while (true) {
-				
-			}
+				user = (Planner) new Planner(validServices);
+			toTransactionSummaryFile = new FileWriter("transactionSummaryFile.txt");
+			acceptTransactions(user, scanner, toTransactionSummaryFile);
+			toTransactionSummaryFile.close();
 		}
 		
 	}
