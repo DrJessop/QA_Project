@@ -13,11 +13,6 @@ public class Agent extends User {
 	private HashMap<String, Integer> numTicketsCanceledForService;
 
 	public Agent(String fileName) {
-		/* Class Agent
-		 * Functionality: This class has agent transaction methods, and defaults the parameters within the Agent Class to 0.
-		 * Parameters 
-		 * String fileName: The string with the name of the valid services file including the '.txt' extension
-		 */
 		super(fileName);
 		this.numTicketsAlreadyChanged = 0;
 		this.numTicketsAlreadyCanceled = 0;
@@ -75,8 +70,8 @@ public class Agent extends User {
 		 * method cancelTickets: Scanner -> FileWriter -> null
 		 * Functionality: Allows the user to cancel a certain amount of tickets for a specific service
 		 * Parameters
-		 * Scanner scanner: Accepts the user's input
-		 * FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
+		 * 	Scanner scanner: Accepts the user's input
+		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 		 */
 		String serviceNumber;					
 		String numTicketsCanceled;
@@ -118,8 +113,8 @@ public class Agent extends User {
 		 * method createService: Scanner -> FileWriter -> null
 		 * Functionality: Prints out permission denied since agents cannot create services
 		 * Parameters
-		 * Scanner scanner: Accepts the user's input
-		 * FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
+		 * 	Scanner scanner: Accepts the user's input
+		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 		 */
 		System.out.println("Permission denied. You cannot create a service");
 	}
