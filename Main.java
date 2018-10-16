@@ -1,5 +1,6 @@
 package frontend;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
@@ -53,13 +54,13 @@ public class Main {
 				case "deleteservice": 
 					user.deleteService(scanner, toTransactionSummaryFile);
 					break;
-				case "selltickets": 
+				case "sellticket": 
 					user.sellTickets(scanner, toTransactionSummaryFile);
 					break;
-				case "changetickets":
+				case "changeticket":
 					user.changeTickets(scanner, toTransactionSummaryFile);
 					break;
-				case "canceltickets":
+				case "cancelticket":
 					user.cancelTickets(scanner, toTransactionSummaryFile);
 					break;
 				case "logout": 
@@ -73,10 +74,14 @@ public class Main {
 	
 	public static void main(String[] args) throws ParseException, IOException {
 		
-		Scanner scanner = new Scanner(System.in);
 		String validServices = "validServices.txt";
+		if (!(new File(validServices).exists())) {
+			System.out.println("'validServices.txt' is not in the current directory");
+			return;
+		}
 		User user;
 		FileWriter toTransactionSummaryFile;
+		Scanner scanner = new Scanner(System.in);
 		while (true) {
 			
 			char userState = login(scanner);
@@ -87,7 +92,7 @@ public class Main {
 				user = (Planner) new Planner(validServices);
 			toTransactionSummaryFile = new FileWriter("transactionSummaryFile.txt");
 			acceptTransactions(user, scanner, toTransactionSummaryFile);
-			toTransactionSummaryFile.close();
+			//toTransactionSummaryFile gets closed in the User class's logout method
 		}
 		
 	}

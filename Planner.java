@@ -79,7 +79,7 @@ public class Planner extends User {
 				}
 			}
 			if (isGood) {			// Add the service to the map
-				writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CRE %s 0000 00000 %s %s\n", serviceNumber, name, date));
+				writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CRE %s 0 00000 %s %s\n", serviceNumber, name, date));
 				System.out.println("The service was added to the registry");
 				return;
 			} else 
@@ -127,7 +127,7 @@ public class Planner extends User {
 		String numTicketsToCancel = getUserInput("Please enter the number of tickets to cancel: ", scanner);
 		try {								// Check for valid input and kill transaction if input is not valid
 			int numOfTickets = Integer.parseInt(numTicketsToCancel);
-			if (numOfTickets < 0 || numOfTickets > 1000) {     	// Ensure the ticket amount is within the limit
+			if (numOfTickets < 1 || numOfTickets > 1000) {     	// Ensure the ticket amount is within the limit
 				System.out.println("Invalid Input: The ticket quantity you have entered is not valid.");
 				return;
 			} 

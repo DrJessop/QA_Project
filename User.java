@@ -5,25 +5,25 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Scanner; 
+import java.util.HashSet;
+import java.util.Scanner;
 
 public abstract class User {
 	
-	protected HashMap<String, Boolean> validServiceMap;
+	protected HashSet<String> validServiceSet;
 	
 	public User(String validServices) {
 		/*
 		 * abstract class User
 		 * Functionality: This class acts as a driver for the agent and planner classes. 
 		 * Parameters
-		 * 	String validServices: The string with the name of the valid services file including the '.txt' extension
+		 * 	HashSet<String> validServiceMap: The string with the name of the valid services file including the '.txt' extension
 		 */
-		this.validServiceMap = new HashMap<>();
+		this.validServiceSet = new HashSet<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(validServices))) {
 			String line;
 			while (!(line = br.readLine()).equals("00000")) 
-				this.validServiceMap.put(line, true);
+				this.validServiceSet.add(line);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -52,7 +52,7 @@ public abstract class User {
 		 * Returns
 		 * 	Whether the service number corresponds to a valid service or not
 		 */
-		if (!this.validServiceMap.containsKey(serviceNumber)) return false;
+		if (!this.validServiceSet.contains(serviceNumber)) return false;
 		return true;
 	}
 	
@@ -73,6 +73,7 @@ public abstract class User {
 	
 	protected void logout(FileWriter toTransactionSummaryFile) throws IOException {
 		writeToTransactionSummaryFile(toTransactionSummaryFile, "EOS 00000 0 00000 **** 0\n");
+		toTransactionSummaryFile.close();
 	}
 	
 	protected void sellTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {

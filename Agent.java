@@ -3,6 +3,7 @@ package frontend;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Agent extends User {
@@ -16,6 +17,9 @@ public class Agent extends User {
 		this.numTicketsAlreadyChanged = 0;
 		this.numTicketsAlreadyCanceled = 0;
 		this.numTicketsCanceledForService = new HashMap<>();
+		Iterator<String> iter = this.validServiceSet.iterator();
+		while (iter.hasNext())
+			this.numTicketsCanceledForService.put(iter.next(), 0);
 	}
 
 	@Override
@@ -42,9 +46,8 @@ public class Agent extends User {
 		}
 		numTicketsToChange = getUserInput("Please enter the number of tickets to cancel: ", scanner);
 		try {								// Check for valid input and kill transaction if input is not valid
-			int numOfTickets = 0;			
-			numOfTickets = Integer.parseInt(numTicketsToChange);
-			if (numOfTickets < 0) {        // Ensure the ticket amount is within the limit
+			int numOfTickets = Integer.parseInt(numTicketsToChange);
+			if (numOfTickets < 1) {        // Ensure the ticket amount is within the limit
 				System.out.println("Invalid Input: The ticket quantity you have entered is not greater than 0.");
 				return;
 			} else if ((this.numTicketsAlreadyChanged + numOfTickets) > 20) {
@@ -60,7 +63,6 @@ public class Agent extends User {
 		}			
 		return;
 	}
-
 
 	@Override
 	public void cancelTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
@@ -82,17 +84,18 @@ public class Agent extends User {
 		numTicketsCanceled = getUserInput("Please enter the number of tickets to cancel: ", scanner);
 		try {								// Check for valid input and kill transaction if input is not valid
 			int numOfTickets = Integer.parseInt(numTicketsCanceled);
-			if ((numOfTickets < 0) || (numOfTickets > 10)) {     // Ensure the ticket amount is within the limit
-				System.out.println("Invalid Input: The ticket quantity you have entered is not in between 0 and 10.");
+			if ((numOfTickets < 1) || (numOfTickets > 10)) {     // Ensure the ticket amount is within the limit
+				System.out.println("Invalid Input: The ticket quantity you have entered is not in between 1 and 10.");
 				return;
 			} else if ((this.numTicketsAlreadyCanceled + numOfTickets) > 20) {
 				System.out.println("Invalid Input: The agent cannot cancel more than 20 tickets in a session.");
 				return;
 			}
 			if (this.numTicketsCanceledForService.get(serviceNumber) + numOfTickets > 10) {
-				System.out.println("Cannot cancel for than 10 tickets for a particular service");
+				System.out.println("Cannot cancel more than 10 tickets for a particular service");
 				return;
 			}
+		
 			this.numTicketsCanceledForService.replace(serviceNumber, this.numTicketsCanceledForService.get(serviceNumber) + numOfTickets);
 			writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CAN %s %s 00000 **** 0\n", serviceNumber, numTicketsCanceled));
 			System.out.println("The transaction was successful");			// Notify user of successful transaction.
@@ -102,7 +105,6 @@ public class Agent extends User {
 		}			
 		return;				// If Program gets here, then the transaction failed
 	}
-
 
 
 	@Override
@@ -128,7 +130,7 @@ public class Agent extends User {
 		 * 	Scanner scanner: Accepts the user's input
 		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 		 */
-		System.out.println("You do not have access for this service. You cannot delete a service");
+		System.out.println("Permission denied. You cannot delete a service");
 	}
 
 }
