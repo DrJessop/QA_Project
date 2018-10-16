@@ -16,8 +16,8 @@ public abstract class User {
 		/*
 		 * abstract class User
 		 * Functionality: This class acts as a driver for the agent and planner classes. 
-		 * Parameters
-		 * 	HashSet<String> validServiceMap: The string with the name of the valid services file including the '.txt' extension
+		 * Attributes
+		 * 	HashSet<String> validServiceSet: The string with the name of the valid services file including the '.txt' extension
 		 */
 		this.validServiceSet = new HashSet<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(validServices))) {
@@ -34,10 +34,10 @@ public abstract class User {
 	protected static void writeToTransactionSummaryFile(FileWriter writer, String transaction) throws IOException {
 		/*
 		 * function writeToTransactionSummaryFile: ArrayList<String> -> String -> null
-		 * Functionality: Writes out all of the transactions to 
+		 * Functionality: Writes out all of the transactions to the transaction summary file
 		 * Parameters
-		 * 	Scanner scanner: Accepts the user's input
-		 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+		 * 	FileWriter writer: Adds the transaction to the transaction summary file
+		 * 	String transaction: The transaction that is being written to the transaction summary file
 		 */
 		writer.write(transaction);
 	}
@@ -72,18 +72,23 @@ public abstract class User {
 	
 	
 	protected void logout(FileWriter toTransactionSummaryFile) throws IOException {
+		/*
+		 * method logout :  FileWriter -> null
+		 * Functionality: Allows the user to logout and puts in the EOS transaction into the transaction summary file
+		 * Parameters
+		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
+		*/		
 		writeToTransactionSummaryFile(toTransactionSummaryFile, "EOS 00000 0 00000 **** 0\n");
 		toTransactionSummaryFile.close();
 	}
 	
 	protected void sellTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
-		
 		/*
 		 * method sellTickets : Scanner -> ArrayList<String> -> null
 		 * Functionality: Allow the user to sell tickets from a specified service.
 		 * Parameters
 		 * 	Scanner scanner: Accepts the user's input
-		 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 		*/					
 		String serviceNumber = getUserInput("Please enter a valid service number:", scanner); // Store the user input
 		
@@ -109,7 +114,7 @@ public abstract class User {
 	 * Functionality: Allows the user to cancel a certain amount of tickets for a service
 	 * Parameters
 	 * 	Scanner scanner: Accepts the user's input
-	 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+	 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 	 */
 	protected abstract void cancelTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
 	
@@ -118,7 +123,7 @@ public abstract class User {
 	 * Functionality: Allows the user to change a certain amount of tickets to a different type of service
 	 * Parameters
 	 * 	Scanner scanner: Accepts the user's input
-	 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+	 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 	 */
 	protected abstract void changeTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
 	
@@ -127,7 +132,7 @@ public abstract class User {
 	 * Functionality: Allows the user to create a service in planner mode, will print out permission denied for agents
 	 * Parameters
 	 * 	Scanner scanner: Accepts the user's input
-	 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+	 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 	 */
 	protected abstract void createService(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
 	
@@ -136,7 +141,7 @@ public abstract class User {
 	 * Functionality: Allows planners to delete service, will print out permission denied for agents
 	 * Parameters
 	 * 	Scanner scanner: Accepts the user's input
-	 * 	ArrayList<String> transactionMessages: Adds the transaction to the transaction summary file
+	 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file for 
 	 */
 	protected abstract void deleteService(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
 	
