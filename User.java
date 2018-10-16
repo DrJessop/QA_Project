@@ -92,22 +92,20 @@ public abstract class User {
 			return;
 		}
 		String numTicketsToSell = getUserInput("Please enter a number of tickets to sell: ", scanner);
-		try {								// Check for valid input and kill transaction if input is not valid
+		try { 
+			//If the ticket number the user enters is a number
 			int ticketNumber = Integer.parseInt(numTicketsToSell);
-			if (ticketNumber < 0) 
-				System.out.println("Invalid Input: The ticket quantity you have entered is less than 0.");
+			if (ticketNumber < 1) 
+				System.out.println("Invalid Input: The ticket quantity you have entered is less than 1.");
 			writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("SEL %s %s 00000 **** 0\n", serviceNumber, numTicketsToSell));
 		} catch (NumberFormatException e) {
 			System.out.println("Invalid Input: The number of tickets you have entered is not a string.");
 		}
 	}
 	
-	/*
-	 * Abstract methods that drive the Planner and Agent classes
-	 */
 	
 	/*
-	 * method cancelTickets: Scanner -> ArrayList<String> -> null
+	 * abstract method cancelTickets: Scanner -> ArrayList<String> -> null
 	 * Functionality: Allows the user to cancel a certain amount of tickets for a service
 	 * Parameters
 	 * 	Scanner scanner: Accepts the user's input

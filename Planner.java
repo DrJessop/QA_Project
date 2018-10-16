@@ -26,7 +26,7 @@ public class Planner extends User {
 		try {
 			Integer.parseInt(userInput);
 		} catch (NumberFormatException e) {
-			System.out.println("The date you entered contains non-number variables.");
+			System.out.println("The date you entered contains non-numeric characters.");
 			return -1;
 		}
 		if (userInput.length() != 8) {
@@ -78,7 +78,7 @@ public class Planner extends User {
 						isGood = false;
 				}
 			}
-			if (isGood) {			// Add the service to the map
+			if (isGood) { //The service information is all correct
 				writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CRE %s 0 00000 %s %s\n", serviceNumber, name, date));
 				System.out.println("The service was added to the registry");
 				return;

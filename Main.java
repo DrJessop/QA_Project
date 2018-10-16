@@ -64,7 +64,7 @@ public class Main {
 					user.cancelTickets(scanner, toTransactionSummaryFile);
 					break;
 				case "logout": 
-					user.logout(toTransactionSummaryFile);
+					user.logout(toTransactionSummaryFile); //Writes the final EOS line to the transaction summary file and closes the file reader
 					stillLoggedIn = false;
 					break;
 				default: System.out.print("You have entered an invalid transaction. ");   
@@ -82,17 +82,18 @@ public class Main {
 		User user;
 		FileWriter toTransactionSummaryFile;
 		Scanner scanner = new Scanner(System.in);
+		char userState;
+		
 		while (true) {
 			
-			char userState = login(scanner);
+			userState = login(scanner);
 			
 			if (userState == 'a') 
 				user = (Agent) new Agent(validServices);
 			else
 				user = (Planner) new Planner(validServices);
 			toTransactionSummaryFile = new FileWriter("transactionSummaryFile.txt");
-			acceptTransactions(user, scanner, toTransactionSummaryFile);
-			//toTransactionSummaryFile gets closed in the User class's logout method
+			acceptTransactions(user, scanner, toTransactionSummaryFile); //file reader gets closed in this method
 		}
 		
 	}
