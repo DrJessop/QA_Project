@@ -33,7 +33,7 @@ public abstract class User {
 	
 	protected static void writeToTransactionSummaryFile(FileWriter writer, String transaction) throws IOException {
 		/*
-		 * function writeToTransactionSummaryFile: ArrayList<String> -> String -> null
+		 * function writeToTransactionSummaryFile: FileWriter -> String -> null
 		 * Functionality: Writes out all of the transactions to the transaction summary file
 		 * Parameters
 		 * 	FileWriter writer: Adds the transaction to the transaction summary file
@@ -58,7 +58,7 @@ public abstract class User {
 	
 	protected String getUserInput(String message, Scanner scanner) {
 		/*
-		 * method getUserInput : String -> String
+		 * method getUserInput : String -> Scanner -> String
 		 * Functionality: Get the user input
 		 * Parameters
 		 * 	String message: Display what the user is to see
@@ -84,7 +84,7 @@ public abstract class User {
 	
 	protected void sellTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
 		/*
-		 * method sellTickets : Scanner -> ArrayList<String> -> null
+		 * method sellTickets : Scanner -> FileWriter -> null
 		 * Functionality: Allow the user to sell tickets from a specified service.
 		 * Parameters
 		 * 	Scanner scanner: Accepts the user's input
@@ -110,7 +110,7 @@ public abstract class User {
 	
 	
 	/*
-	 * abstract method cancelTickets: Scanner -> ArrayList<String> -> null
+	 * abstract method cancelTickets: Scanner -> FileWriter -> null
 	 * Functionality: Allows the user to cancel a certain amount of tickets for a service
 	 * Parameters
 	 * 	Scanner scanner: Accepts the user's input
@@ -119,7 +119,7 @@ public abstract class User {
 	protected abstract void cancelTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
 	
 	/*
-	 * abstract method changeTickets: Scanner -> ArrayList<String> -> null
+	 * abstract method changeTickets: Scanner -> FileWriter -> null
 	 * Functionality: Allows the user to change a certain amount of tickets to a different type of service
 	 * Parameters
 	 * 	Scanner scanner: Accepts the user's input
@@ -128,7 +128,7 @@ public abstract class User {
 	protected abstract void changeTickets(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
 	
 	/*
-	 * abstract method createService: Scanner -> ArrayList<String> -> null
+	 * abstract method createService: Scanner -> FileWriter -> null
 	 * Functionality: Allows the user to create a service in planner mode, will print out permission denied for agents
 	 * Parameters
 	 * 	Scanner scanner: Accepts the user's input
@@ -137,7 +137,7 @@ public abstract class User {
 	protected abstract void createService(Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException;
 	
 	/*
-	 * abstract method deleteService: Scanner -> ArrayList<String> -> null
+	 * abstract method deleteService: Scanner -> FileWriter -> null
 	 * Functionality: Allows planners to delete service, will print out permission denied for agents
 	 * Parameters
 	 * 	Scanner scanner: Accepts the user's input
