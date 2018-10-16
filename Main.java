@@ -37,10 +37,12 @@ public class Main {
 	
 	public static void acceptTransactions(User user, Scanner scanner, FileWriter toTransactionSummaryFile) throws IOException {
 		/*
-		 * function login: Scanner -> null
-		 * Functionality: Isolates the login logic away from the logic when in the actual program
+		 * function acceptTransactions: User -> Scanner -> FileWriter -> null
+		 * Functionality: The logic that occurs when the user is successfully logged into the program
 		 * Parameters
+		 * 	User user: At the point that this runs, the user has been cast to either a Planner or an Agent object
 		 * 	Scanner scanner: Accepts the user's input
+		 * 	FileWriter toTransactionSummaryFile: Adds the transaction to the transaction summary file
 		 */
 		String transaction;
 		boolean stillLoggedIn = true;
@@ -73,6 +75,13 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws ParseException, IOException {
+		
+		/*
+		 * function main: String[] args -> null
+		 * Functionality: Control flow of the program 
+		 * Parameters
+		 * 	String[] args: Command-line arguments
+		 */
 		
 		String validServices = "validServices.txt";
 		if (!(new File(validServices).exists())) {
