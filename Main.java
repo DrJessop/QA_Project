@@ -77,6 +77,22 @@ public class Main {
 	public static void main(String[] args) throws ParseException, IOException {
 		
 		/*
+		 * Overall program intention:
+		 * 	To serve as an interface for transactions involving transport tickets
+		 * Input and output files:
+		 * 	input file: 
+		 * 		'validServices.txt'
+		 * 			each line in this file contains a five-digit number
+		 * 			no line begins with a 0, except the final line
+		 * 			the final line in this file is 00000
+		 * 	output file:
+		 * 		'transactionSummaryFile.txt'
+		 * 			this program creates this file if it is not currently in the directory, else it overwrites it 
+		 * 			the exact format of the output is in the specifications for this project
+		 * How the program is intended to be run:
+		 * 	This program should be run in a Java v8 IDE
+		 * 	The 'validServices.txt' file needs to be within the scope of this Java project
+		 *	The project must contain the classes Agent, Planner, User, and Main
 		 * function main: String[] args -> null
 		 * Functionality: Control flow of the program 
 		 * Parameters
