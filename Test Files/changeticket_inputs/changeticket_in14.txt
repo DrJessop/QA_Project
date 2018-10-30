@@ -1,8 +1,6 @@
-login
 planner
 changeticket
 
-14319
-
+12345
 75000
 logout

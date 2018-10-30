@@ -1,14 +1,6 @@
-login
 planner
 changeticket
-23718
-<<<<<<< HEAD
-
-26876
-
+12345
+12346
 21
 logout
-=======
-12345
-21
->>>>>>> de005956af5b4d02acc3dc1d38a4f2f018e066c6
