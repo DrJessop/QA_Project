@@ -7,3 +7,4 @@ changeticket
 79845
 
 21
+logout
