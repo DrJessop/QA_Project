@@ -1,6 +1,5 @@
 planner
 createservice
 
-20180101
-
-GOTOFRANCE
+03673
+logout

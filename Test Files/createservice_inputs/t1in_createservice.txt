@@ -1,0 +1,9 @@
+planner
+createservice
+
+12345
+
+20181001
+
+GOTOFRANCE
+logout
