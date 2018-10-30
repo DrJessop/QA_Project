@@ -1,8 +1,7 @@
+planner
 changeticket
 
 12345
+75000
 
-14320
-
-5
 logout

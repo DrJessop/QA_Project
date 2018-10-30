@@ -1,9 +1,8 @@
 Please enter agent or planner: 
 Please enter a valid transaction: 
 Please enter a valid service number:
-Please enter a valid service number:
-Please enter number of ticket to change:
 Invalid input.
 Please enter a valid transaction:
+Please enter agent or planner:
 
 
