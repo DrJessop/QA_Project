@@ -1,0 +1,2 @@
+Permission denied. You cannot delete a service
+
