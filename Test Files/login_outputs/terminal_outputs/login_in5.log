@@ -1,5 +1,4 @@
 Please enter agent or planner: 
 Please enter a valid transaction: 
-You have entered an invalid transaction. Please enter a valid transaction: 
-Permission denied. You cannot delete a service
-Please enter a valid transaction: 
+Permission denied. You cannot create a service
+Please enter a valid transaction:
