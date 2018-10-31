@@ -16,7 +16,7 @@ do
 				#echo "2 $i"
 				#echo "3 $folder"
 				#echo "4 $FILE"
-				cmp $file $FILE && echo "$NUMBER" >> "$i"/failure.txt
+				cmp $file $FILE && echo "$NUMBER" >> "$i"/failure.txt 2> /dev/null
 			fi
 		done
 	done
