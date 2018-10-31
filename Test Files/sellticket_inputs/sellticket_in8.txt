@@ -1,7 +1,5 @@
 planner
 sellticket
-
 12345
-
 1001
 logout
