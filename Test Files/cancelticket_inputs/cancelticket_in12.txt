@@ -1,5 +1,5 @@
 agent
-sellticket
+cancelticket
 12345
-10
+1001
 logout

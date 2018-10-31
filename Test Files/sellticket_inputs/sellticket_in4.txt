@@ -1,5 +1,5 @@
 agent
 sellticket
 12345
-5
+0
 logout
