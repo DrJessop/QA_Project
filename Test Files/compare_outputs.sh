@@ -2,6 +2,7 @@ for i in *program_outputs
 do
 	for folder in "$i"/*
 	do 
+		echo $i/${folder#*/} >> "$i"/failure.txt
 		for file in "$folder"/*
 		do 
 			if [ -f "${file}" ]
