@@ -28,7 +28,7 @@ public class FileChecker {
 		 * method checkServiceName : String -> void
 		 * Functionality: Checks that a given name was correctly entered
 		 * Parameters
-		 * 	String input: User input that should be a valid
+		 * 	String input: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
 		*/
 		if ((input.length() < 3) || (input.length() > 39) || 
@@ -48,7 +48,7 @@ public class FileChecker {
 		 * method checkServiceDate : String -> void
 		 * Functionality: Checks that a given date was correctly entered
 		 * Parameters
-		 * 	String input: User input that should be a valid date
+		 * 	String input: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
 		*/
 		try {
