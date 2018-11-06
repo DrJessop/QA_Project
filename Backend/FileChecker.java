@@ -23,7 +23,26 @@ public class FileChecker {
 	private static void checkServiceNumber(String input) throws InvalidLineException { }
 	private static void checkServiceCapacity(String input) throws InvalidLineException { }
 	private static void checkNumberTicketsSold(String input) throws InvalidLineException { }
-	private static void checkServiceName(String input) throws InvalidLineException { }
+	private static void checkServiceName(String input) throws InvalidLineException { 
+		/*
+		 * method checkServiceName : String -> void
+		 * Functionality: Checks that a given name was correctly entered
+		 * Parameters
+		 * 	String input: User input that should be a valid
+		 * Throws: InvalidLineException when wrong input is detected
+		*/
+		if ((input.length() < 3) || (input.length() > 39) || 
+			(input.charAt(0) == ' ') || (input.charAt(input.length() - 1) == ' ')) {
+				throw new InvalidLineException("The name is not valid");
+			} else {
+				for (int i = 0; i < input.length(); i++) {
+					if((!Character.isLetterOrDigit(input.charAt(i))) && (input.charAt(i) != ' ')) { 
+						throw new InvalidLineException("A non-alphanumeric char detected");
+					}
+				}
+			}
+	}
+	
 	private static void checkServiceDate(String input) throws InvalidLineException {	
 		/*
 		 * method checkServiceDate : String -> void
