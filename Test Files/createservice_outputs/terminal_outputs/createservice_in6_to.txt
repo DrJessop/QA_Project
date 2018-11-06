@@ -1,0 +1,6 @@
+Please enter agent or planner: 
+Please enter a valid transaction: 
+Please enter a valid service number: 
+Service number already exists
+Please enter a valid transaction: 
+Please enter agent or planner: 
