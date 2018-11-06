@@ -24,7 +24,29 @@ public class FileChecker {
 	private static void checkServiceCapacity(String input) throws InvalidLineException { }
 	private static void checkNumberTicketsSold(String input) throws InvalidLineException { }
 	private static void checkServiceName(String input) throws InvalidLineException { }
-	private static void checkServiceDate(String input) throws InvalidLineException { }
+	private static void checkServiceDate(String input) throws InvalidLineException {	
+		/*
+		 * method checkServiceDate : String -> void
+		 * Functionality: Checks that a given date was correctly entered
+		 * Parameters
+		 * 	String input: User input that should be a valid date
+		 * Throws: InvalidLineException when wrong input is detected
+		*/
+		try {
+			Integer.parseInt(input);
+		} catch (NumberFormatException e) {
+			throw new InvalidLineException("The date you entered contains non-numeric characters.");
+		}
+		if (input.length() != 8) {
+			throw new InvalidLineException("The date you entered is not of length 8.");
+		} else if ((Integer.parseInt(input.substring(0,4)) < 1980) || (Integer.parseInt(input.substring(0,4)) > 2999)) {
+			throw new InvalidLineException("The year is invalid.");
+		} else if ((Integer.parseInt(input.substring(4,6)) < 1) || (Integer.parseInt(input.substring(4,6)) > 12)) {
+			throw new InvalidLineException("The month is invalid.");
+		} else if ((Integer.parseInt(input.substring(6,8)) < 1) || (Integer.parseInt(input.substring(6,8)) > 31)) {
+			throw new InvalidLineException("The day is invalid.");
+		}
+	}
 
 	//Fill Functions above
 	private static void checkValidService(String serviceLine) throws InvalidLineException {
