@@ -18,11 +18,47 @@ public class FileChecker {
 	
 	private FileChecker() {} 
 	
-	// Fill in these functions with the appropriate checks
+	/************************************************************************
+	 * checkServiceNumber() does not check if the service number actually exists
+	 **************************************************/
 	
-	private static void checkServiceNumber(String input) throws InvalidLineException { }
-	private static void checkServiceCapacity(String input) throws InvalidLineException { }
-	private static void checkNumberTicketsSold(String input) throws InvalidLineException { }
+	private static void checkServiceNumber(String input) throws InvalidLineException { 
+		/*
+		 * method checkServiceNumber : String -> void
+		 * Functionality: Checks that a given service number was correctly entered
+		 * Parameters
+		 * 	String input: User input that will be validated based on specifications
+		 * Throws: InvalidLineException when wrong input is detected
+		*/
+		try {
+			Integer.parseInt(input);
+			if ((input.length() != 5) || (input.charAt(0) == '0')) {
+				throw new InvalidLineException("Invalid Input: The service number is not valid.");
+			}
+		} catch (NumberFormatException e) {
+			throw new InvalidLineException("The service number you have entered is not a number.");
+		}
+	}
+
+	private static void checkNumberTicketsSoldAndCapacity(String input) throws InvalidLineException { 
+		/*
+		 * method checkNumberTicketsSold : String -> void
+		 * Functionality: Checks that number of tickets sold and capacity was correctly entered
+		 * Parameters
+		 * 	String input: User input that will be validated based on specifications
+		 * Throws: InvalidLineException when wrong input is detected
+		*/
+		
+		try {								// Check for valid input and kill transaction if input is not valid
+			int numOfTickets = Integer.parseInt(input);
+			if (numOfTickets < 1 || numOfTickets > 1000) {     	// Ensure the ticket amount is within the limit
+				throw new InvalidLineException("The tickets sold is not within 1 - 1000");
+			} 
+		} catch (NumberFormatException e) {
+			throw new InvalidLineException("Tickets entered is not an integer.");
+		}	
+	}
+	
 	private static void checkServiceName(String input) throws InvalidLineException { 
 		/*
 		 * method checkServiceName : String -> void
