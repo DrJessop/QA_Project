@@ -4,3 +4,4 @@ createservice
 20181210
 Bitdas 
 
+logout
