@@ -44,7 +44,7 @@ public class Agent extends User {
 			System.out.println("This is not a valid service number");
 			return;
 		}
-		numTicketsToChange = getUserInput("Please enter the number of tickets to cancel: ", scanner);
+		numTicketsToChange = getUserInput("Please enter the number of tickets to change: ", scanner);
 		try {								// Check for valid input and kill transaction if input is not valid
 			int numOfTickets = Integer.parseInt(numTicketsToChange);
 			if (numOfTickets < 1) {        // Ensure the ticket amount is within the limit

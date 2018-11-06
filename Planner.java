@@ -35,10 +35,10 @@ public class Planner extends User {
 		} else if ((Integer.parseInt(userInput.substring(0,4)) < 1980) || (Integer.parseInt(userInput.substring(0,4)) > 2999)) {
 			System.out.println("The year is invalid.");
 			return -1;
-		} else if ((Integer.parseInt(userInput.substring(5,6)) < 1) || (Integer.parseInt(userInput.substring(5,6)) > 12)) {
+		} else if ((Integer.parseInt(userInput.substring(4,6)) < 1) || (Integer.parseInt(userInput.substring(4,6)) > 12)) {
 			System.out.println("The month is invalid.");
 			return -1;
-		} else if ((Integer.parseInt(userInput.substring(7,8)) < 1) || (Integer.parseInt(userInput.substring(7,8)) > 31)) {
+		} else if ((Integer.parseInt(userInput.substring(6,8)) < 1) || (Integer.parseInt(userInput.substring(6,8)) > 31)) {
 			System.out.println("The day is invalid.");
 			return -1;
 		}
@@ -56,7 +56,6 @@ public class Planner extends User {
 							
 		String date ;
 		String name;
-		boolean isGood = true;					// Make sure there are no non-alphanumeric numbers
 		String serviceNumber = getUserInput("Please enter a valid service number: ", scanner); // Store the user input
 		
 		if ((serviceNumber.length() != 5) || (serviceNumber.charAt(0) == '0')) {
@@ -73,17 +72,17 @@ public class Planner extends User {
 			name = getUserInput("Please enter a name: ", scanner);     // Check to make sure the name is valid
 			if ((name.length() < 3) || (name.length() > 39) || 
 				(name.charAt(0) == ' ') || (name.charAt(name.length() - 1) == ' ')) {
-				for (int i = 0; i < name.length(); i++) {
-					if(!Character.isLetterOrDigit(name.charAt(i))) 
-						isGood = false;
+				System.out.println("Invalid service");
+				return;
+			}
+			for (int i = 0; i < name.length(); i++) {
+				if(!Character.isLetterOrDigit(name.charAt(i)) && !(name.charAt(i) == ' ')) {
+					System.out.println("You included a non-alpha numeric character");
+					return;
 				}
 			}
-			if (isGood) { //The service information is all correct
-				writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CRE %s 0 00000 %s %s\n", serviceNumber, name, date));
-				System.out.println("The service was added to the registry");
-				return;
-			} else 
-				System.out.println("The entry for the name is not valid.");
+			writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CRE %s 0 00000 %s %s\n", serviceNumber, name, date));
+			System.out.println("The service was added to the registry");
 		} catch (NumberFormatException e) {
 			System.out.println("The service number you have entered is not a number.");
 		}
@@ -156,21 +155,21 @@ public class Planner extends User {
 			return;
 		}
 		String serviceNumber2;
-		String numTicketsToCancel;
+		String numTicketsToChange;
 		serviceNumber2 = getUserInput("Please enter another service valid number: ", scanner);
 		if (!this.validService(serviceNumber2)) {
 			System.out.println("This service is not in the valid services file");
 			return;
 		}
-		numTicketsToCancel = getUserInput("Please enter the number of tickets to cancel: ", scanner);
+		numTicketsToChange = getUserInput("Please enter the number of tickets to change: ", scanner);
 		try {								// Check for valid input and kill transaction if input is not valid
 			int numOfTickets = 0;			
-			numOfTickets = Integer.parseInt(numTicketsToCancel);
+			numOfTickets = Integer.parseInt(numTicketsToChange);
 			if (numOfTickets < 1 || numOfTickets > 1000) {    // Ensure the ticket amount is within the limit
 				System.out.println("Invalid Input: The ticket quantity you have entered is not valid.");
 				return;
 			}
-			writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CHG %s %s %s **** 0\n", serviceNumber, numTicketsToCancel, serviceNumber2));
+			writeToTransactionSummaryFile(toTransactionSummaryFile, String.format("CHG %s %s %s **** 0\n", serviceNumber, numTicketsToChange, serviceNumber2));
 			System.out.println("The transaction was successful");			// Notify user of successful transaction.
 			return;
 		} catch (NumberFormatException e) {

@@ -99,7 +99,7 @@ public class Main {
 		 * 	String[] args: Command-line arguments
 		 */
 		
-		String validServices = args[1];
+		String validServices = args[0];
 		if (!(new File(validServices).exists())) {
 			System.out.println("'validServices.txt' is not in the current directory");
 			return;
@@ -117,7 +117,7 @@ public class Main {
 				user = (Agent) new Agent(validServices);
 			else
 				user = (Planner) new Planner(validServices);
-			toTransactionSummaryFile = new FileWriter(args[2]);
+			toTransactionSummaryFile = new FileWriter(args[1]);
 			acceptTransactions(user, scanner, toTransactionSummaryFile); //file reader gets closed in this method
 		}
 		
