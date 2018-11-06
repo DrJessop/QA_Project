@@ -1,0 +1,14 @@
+Please enter agent or planner: 
+Please enter a valid transaction: 
+Please enter a valid service number:
+Please enter another service valid number: 
+Please enter the number of tickets to change: 
+The transaction was successful
+Please enter a valid transaction: 
+You have entered an invalid transaction. Please enter a valid transaction: 
+Please enter a valid service number:
+Please enter another service valid number: 
+Please enter the number of tickets to change: 
+Invalid Input: The agent cannot change more than 20 tickets in a session.
+Please enter a valid transaction: 
+Please enter agent or planner: 
