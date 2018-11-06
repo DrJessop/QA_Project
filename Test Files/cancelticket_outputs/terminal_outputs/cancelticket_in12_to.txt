@@ -1,0 +1,7 @@
+Please enter agent or planner: 
+Please enter a valid transaction: 
+Please enter a valid service number:
+Please enter the number of tickets to cancel: 
+Invalid Input: The ticket quantity you have entered is not in between 1 and 10.
+Please enter a valid transaction: 
+Please enter agent or planner: 
