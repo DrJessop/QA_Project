@@ -105,7 +105,7 @@ public class FileChecker {
 	}
 
 	//Fill Functions above
-	private static serviceInfo parseServiceLine(String serviceLine) throws InvalidLineException {
+	private static ServiceInfo parseServiceLine(String serviceLine) throws InvalidLineException {
 		/*
 		 * method checkServiceDate : String -> serviceInfo
 		 * Functionality: Parse the string and put the contents into an object
@@ -113,23 +113,37 @@ public class FileChecker {
 		 * 	String input: A single line from a service line
 		 * Throws: InvalidLineException when wrong input is detected from service line
 		*/	
-		
+		int thereBetterBeASpaceHere = serviceLine.length() - 9;
+		if (serviceLine.charAt(5) != ' ' || serviceLine.charAt(thereBetterBeASpaceHere) != ' ' || serviceLine.charAt(thereBetterBeASpaceHere - 1) == ' ') 
+			throw new InvalidLineException("Invalid service line");
 		int countSpaces = 0;    // Count the number of spaces before reaching the name
-		bufferString = "";
-		
-		for (int i = 0; i < serviceLine.length(); i++) {
-			if (serviceLine[i] != ' ') {
-				while (serviceLine[i] != ' ') {
-					bufferString += serviceLine[i];
-					i++;
-				}
+		String serviceNumber = serviceLine.substring(0, 5);				// Used to instantiate object
+		String capacity = "";
+		String numTicketsSold = "";
+		String date = serviceLine.substring(serviceLine.length() - 8, serviceLine.length());
+		System.out.println(serviceNumber);
+		serviceLine = serviceLine.substring(6, serviceLine.length() - 8);
+		System.out.println(date);
+		int counter = 0;
+		while (countSpaces < 2) {
+			if (serviceLine.charAt(counter) == ' ') {
+				if (serviceLine.charAt(counter + 1) == ' ') throw new InvalidLineException("Invalid service line");
+				countSpaces++;
 			}
-			if (countSpaces == 0) {
-				
+			else {
+				if (countSpaces == 0) 
+					capacity = capacity + serviceLine.charAt(counter);
+				if (countSpaces == 1)
+					numTicketsSold = numTicketsSold + serviceLine.charAt(counter);
 			}
-			
+			counter++;	
 		}
-	
+		//if (serviceLine.charAt(serviceLine.length() - 1) == ' ') throw new InvalidLineException("Invalid service line");
+		String name = serviceLine.substring(counter, serviceLine.length());
+		System.out.println(capacity);
+		System.out.println(numTicketsSold);
+		System.out.println(name);
+		return new ServiceInfo(serviceNumber, capacity, numTicketsSold, name, date);
 	}
 	
 	private static void checkTSF(String serviceLine) throws InvalidLineException {
