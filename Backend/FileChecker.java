@@ -14,6 +14,7 @@ class InvalidLineException extends Exception {
 	}
 }
 
+
 public class FileChecker {
 	
 	private FileChecker() {} 
@@ -104,9 +105,30 @@ public class FileChecker {
 	}
 
 	//Fill Functions above
-	private static void checkValidService(String serviceLine) throws InvalidLineException {
+	private static serviceInfo parseServiceLine(String serviceLine) throws InvalidLineException {
+		/*
+		 * method checkServiceDate : String -> serviceInfo
+		 * Functionality: Parse the string and put the contents into an object
+		 * Parameters
+		 * 	String input: A single line from a service line
+		 * Throws: InvalidLineException when wrong input is detected from service line
+		*/	
 		
-		// To do: Fill in the function, check each service is valid
+		int countSpaces = 0;    // Count the number of spaces before reaching the name
+		bufferString = "";
+		
+		for (int i = 0; i < serviceLine.length(); i++) {
+			if (serviceLine[i] != ' ') {
+				while (serviceLine[i] != ' ') {
+					bufferString += serviceLine[i];
+					i++;
+				}
+			}
+			if (countSpaces == 0) {
+				
+			}
+			
+		}
 	
 	}
 	
