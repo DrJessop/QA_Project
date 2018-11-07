@@ -8,11 +8,11 @@ public class ServiceInfo {
 	private String name;
 	private String date;
 	
-	public ServiceInfo(String serviceNumber, String capacity, String numTicketsSold, String name, String date) {
-		this.serviceNumber = serviceNumber;
-		this.capacity = capacity;
-		this.numTicketsSold = numTicketsSold;
-		this.name = name;
+	public ServiceInfo(String serviceNumber, String capacity, String numTicketsSold, String name, String date) throws InvalidLineException {
+		setServiceNumber(serviceNumber);
+		setCapacity(capacity);
+		setNumTicketsSold(numTicketsSold);
+		setName(name);
 		this.date = date;
 	}
 	
