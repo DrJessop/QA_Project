@@ -16,7 +16,7 @@ public class ServiceInfo {
 		this.date = date;
 	}
 	
-	public void setServiceNumber(String newServiceNumber) { 
+	public void setServiceNumber(String newServiceNumber) throws InvalidLineException { 
 		/*
 		 * method setServiceNumber : String -> void
 		 * Functionality: Checks that a given service number was correctly entered
@@ -35,7 +35,7 @@ public class ServiceInfo {
 		this.serviceNumber = newServiceNumber; 
 	}
 	
-	public void setCapacity(String newCapacity) { 
+	public void setCapacity(String newCapacity) throws InvalidLineException { 
 		/*
 		 * method setCapacity : String -> void
 		 * Functionality: Checks that number of tickets sold and capacity was correctly entered
@@ -54,7 +54,7 @@ public class ServiceInfo {
 		this.capacity = newCapacity; 
 	}
 	
-	public void setNumTicketsSold(String newNumTicketsSold) { 
+	public void setNumTicketsSold(String newNumTicketsSold) throws InvalidLineException { 
 		/*
 		 * method setNumTicketsSold : String -> void
 		 * Functionality: Checks that number of tickets sold and capacity was correctly entered
@@ -73,7 +73,7 @@ public class ServiceInfo {
 		this.numTicketsSold = newNumTicketsSold; 
 	}
 	
-	public void setName(String newName) { 
+	public void setName(String newName) throws InvalidLineException { 
 		/*
 		 * method setName : String -> void
 		 * Functionality: Checks that a given name was correctly entered
