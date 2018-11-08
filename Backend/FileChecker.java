@@ -36,9 +36,9 @@ public class FileChecker {
 		String capacity = "";
 		String numTicketsSold = "";
 		String date = serviceLine.substring(serviceLine.length() - 8, serviceLine.length());
-		System.out.println(serviceNumber);
+		//System.out.println(serviceNumber);
 		serviceLine = serviceLine.substring(6, serviceLine.length() - 8);
-		System.out.println(date);
+		//System.out.println(date);
 		int counter = 0;
 		while (countSpaces < 2) {
 			if (serviceLine.charAt(counter) == ' ') {
@@ -53,11 +53,11 @@ public class FileChecker {
 			}
 			counter++;	
 		}
-		//if (serviceLine.charAt(serviceLine.length() - 1) == ' ') throw new InvalidLineException("Invalid service line");
+		if (serviceLine.charAt(serviceLine.length() - 1) == ' ') throw new InvalidLineException("Invalid service line");
 		String name = serviceLine.substring(counter, serviceLine.length());
-		System.out.println(capacity);
-		System.out.println(numTicketsSold);
-		System.out.println(name);
+		//System.out.println(capacity);
+		//System.out.println(numTicketsSold);
+		//System.out.println(name);
 		return new ServiceInfo(serviceNumber, capacity, numTicketsSold, name, date);
 	}
 	
