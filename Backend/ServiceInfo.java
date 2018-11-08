@@ -1,5 +1,3 @@
-package backend;
-
 public class ServiceInfo {
 
 	private String serviceNumber;
@@ -13,10 +11,10 @@ public class ServiceInfo {
 		setCapacity(capacity);
 		setNumTicketsSold(numTicketsSold);
 		setName(name);
-		this.date = date;
+		setDate(date);
 	}
 	
-	public void setServiceNumber(String newServiceNumber) throws InvalidLineException { 
+	public void setServiceNumber(String newServiceNumber) throws InvalidLineException{ 
 		/*
 		 * method setServiceNumber : String -> void
 		 * Functionality: Checks that a given service number was correctly entered
@@ -24,6 +22,7 @@ public class ServiceInfo {
 		 * 	String newServiceNumber: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
 		*/
+		if (newServiceNumber == null) throw new InvalidLineException("Null values are not allowed");
 		try {
 			Integer.parseInt(newServiceNumber);
 			if ((newServiceNumber.length() != 5) || (newServiceNumber.charAt(0) == '0')) {
@@ -43,6 +42,7 @@ public class ServiceInfo {
 		 * 	String newCapacity: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
 		*/
+		if (newCapacity == null) throw new InvalidLineException("Null values are not allowed");
 		try {								// Check for valid input and kill transaction if input is not valid
 			int numOfTickets = Integer.parseInt(newCapacity);
 			if (numOfTickets < 1 || numOfTickets > 1000) {     	// Ensure the ticket amount is within the limit
@@ -62,6 +62,7 @@ public class ServiceInfo {
 		 * 	String newNumTicketsSolds: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
 		*/
+		if (newNumTicketsSold == null) throw new InvalidLineException("Null values are not allowed");
 		try {								// Check for valid input and kill transaction if input is not valid
 			int numOfTickets = Integer.parseInt(newNumTicketsSold);
 			if (numOfTickets < 1 || numOfTickets > 1000) {     	// Ensure the ticket amount is within the limit
@@ -73,7 +74,7 @@ public class ServiceInfo {
 		this.numTicketsSold = newNumTicketsSold; 
 	}
 	
-	public void setName(String newName) throws InvalidLineException { 
+	public void setName(String newName) throws InvalidLineException{ 
 		/*
 		 * method setName : String -> void
 		 * Functionality: Checks that a given name was correctly entered
@@ -81,6 +82,7 @@ public class ServiceInfo {
 		 * 	String newName: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
 		*/
+		if (newName == null) throw new InvalidLineException("Null values are not allowed");
 		if ((newName.length() < 3) || (newName.length() > 39) || 
 				(newName.charAt(0) == ' ') || (newName.charAt(newName.length() - 1) == ' ')) {
 					throw new InvalidLineException("The name is not valid");
@@ -93,6 +95,32 @@ public class ServiceInfo {
 				}
 		}
 		this.name = newName; 
+	}
+	
+	private void setDate(String input) throws InvalidLineException {	
+		/*
+		 * method checkServiceDate : String -> void
+		 * Functionality: Checks that a given date was correctly entered
+		 * Parameters
+		 * 	String input: User input that will be validated based on specifications
+		 * Throws: InvalidLineException when wrong input is detected
+		*/
+		if (input == null) throw new InvalidLineException("Null values are not allowed");
+		try {
+			Integer.parseInt(input);
+		} catch (NumberFormatException e) {
+			throw new InvalidLineException("The date you entered contains non-numeric characters.");
+		}
+		if (input.length() != 8) {
+			throw new InvalidLineException("The date you entered is not of length 8.");
+		} else if ((Integer.parseInt(input.substring(0,4)) < 1980) || (Integer.parseInt(input.substring(0,4)) > 2999)) {
+			throw new InvalidLineException("The year is invalid.");
+		} else if ((Integer.parseInt(input.substring(4,6)) < 1) || (Integer.parseInt(input.substring(4,6)) > 12)) {
+			throw new InvalidLineException("The month is invalid.");
+		} else if ((Integer.parseInt(input.substring(6,8)) < 1) || (Integer.parseInt(input.substring(6,8)) > 31)) {
+			throw new InvalidLineException("The day is invalid.");
+		}
+		this.date = input;
 	}
 	
 }

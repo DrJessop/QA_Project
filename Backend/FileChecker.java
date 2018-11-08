@@ -148,7 +148,11 @@ public class FileChecker {
 	
 	private static void checkTSF(String serviceLine) throws InvalidLineException {
 		
-		// To do: Fill in the function, check TSF File is valid
+		String tranCode = serviceLine.substring(0, 3);
+		String date = serviceLine.substring(serviceLine.length() - 8, serviceLine.length());
+		serviceLine = serviceLine.substring(4, serviceLine.length() - 8);
+		String serviceNumber = serviceLine.substring(0, 5);
+		serviceLine = serviceLine.substring(5, serviceLine.length());
 	
 	}
 	
