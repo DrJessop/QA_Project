@@ -249,12 +249,30 @@ public class FileChecker {
 	
 	
 	private static void createModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		/*
+		 * method createModification : String -> HashMap-> void
+		 * Functionality: Creates a service based on the parameters in serviceLine.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 *  HashMap centralServicesMapping: The hash-map containing the central services and its features.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: void
+		*/
 		String[] tokens = checkValidCRE(serviceLine);
 		if (centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("40. Duplicate service");
 		centralServicesMapping.put(tokens[1], new ServiceInfo(tokens[1], "30", "0", tokens[4], tokens[5]));
 	}
 	
 	private static void deleteModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		/*
+		 * method deleteModification : String -> HashMap-> void
+		 * Functionality: Deletes a service based on the parameters in serviceLine.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 *  HashMap centralServicesMapping: The hash-map containing the central services and its features.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: void
+		*/
 		String[] tokens = checkValidDEL(serviceLine);
 		if (!centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("41. Service does not exist");
 		if (!centralServicesMapping.get(tokens[1]).getName().equals(tokens[4])) throw new InvalidLineException("Service names don't match");
@@ -262,6 +280,15 @@ public class FileChecker {
 	}
 	
 	private static void sellModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		/*
+		 * method sellModification : String -> HashMap-> void
+		 * Functionality: Sell tickets in a service based on the parameters in serviceLine.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 *  HashMap centralServicesMapping: The hash-map containing the central services and its features.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: void
+		*/
 		String[] tokens = checkValidSEL(serviceLine);
 		if (!centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("42. Service does not exist");
 		ServiceInfo centralServiceObject = centralServicesMapping.get(tokens[1]);
@@ -272,6 +299,15 @@ public class FileChecker {
 	}
 	
 	private static void cancelModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		/*
+		 * method cancelModification : String -> HashMap-> void
+		 * Functionality: Cancels tickets in a service based on the parameters in serviceLine.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 *  HashMap centralServicesMapping: The hash-map containing the central services and its features.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: void
+		*/
 		String[] tokens = checkValidCAN(serviceLine);
 		if (!centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("44. Service does not exist");
 		ServiceInfo centralServiceObject = centralServicesMapping.get(tokens[1]);
@@ -282,6 +318,15 @@ public class FileChecker {
 	}
 	
 	private static void changeModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		/*
+		 * method changeModification : String -> HashMap-> void
+		 * Functionality: Changes tickets in two services based on the parameters in serviceLine.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 *  HashMap centralServicesMapping: The hash-map containing the central services and its features.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: void
+		*/
 		String[] tokens = checkValidCHG(serviceLine);
 		if (!centralServicesMapping.containsKey(tokens[1]) || !centralServicesMapping.containsKey(tokens[3])) throw new InvalidLineException("46. Service does not exist");
 		ServiceInfo centralServiceObject = centralServicesMapping.get(tokens[1]);
