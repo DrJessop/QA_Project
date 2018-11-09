@@ -73,18 +73,16 @@ public class FileChecker {
 		return new ServiceInfo(serviceNumber, capacity, numTicketsSold, name, date);
 	}
 	
-	private static String[] checkValidEOS(String serviceLine) throws InvalidLineException {
+	private static void checkValidEOS(String serviceLine) throws InvalidLineException {
 		/*
-		 * method checkValidEOS : String -> String[]
+		 * method checkValidEOS : String -> Void
 		 * Functionality: Ensure the Transaction Summary File Line starting with EOS is valid.
 		 * Parameters
 		 * 	String serviceLine: A single line from the Transaction Summary File.
 		 * Throws: InvalidLineException when wrong input is detected from the line.
-		 * Returns: tokens (The parsed contents of the input.)
+		 * Returns: void
 		*/	
 		if (!(serviceLine.equals("EOS 00000 0 00000 **** 0"))) throw new InvalidLineException("EOS line not correct");
-		String[] tokens = {"EOS", "00000", "0", "00000", "****", "0"};
-		return tokens;
 	}
 	
 	private static String[] checkValidCRE(String serviceLine) throws InvalidLineException {
@@ -107,10 +105,10 @@ public class FileChecker {
 		if ((serviceLine.charAt(9) != ' ') || (serviceLine.charAt(10) != '0') || (serviceLine.charAt(11) != ' '))
 			throw new InvalidLineException("24. Invalid service line, no space");
 		tokens[2] = "0";
-		if (serviceLine.substring(13, 18) != "00000" || serviceLine.charAt(18) != ' ') 
+		if (!serviceLine.substring(12, 17).equals("00000") || serviceLine.charAt(17) != ' ') 
 			throw new InvalidLineException("25. Invalid service line");
 		tokens[3] = "00000";
-		tokens[4] = serviceLine.substring(19, serviceLine.length() - 9);
+		tokens[4] = serviceLine.substring(18, serviceLine.length() - 9);
 		if (!(CheckValidEntry.isValidName(tokens[4])) || serviceLine.charAt(serviceLine.length() - 9) != ' ') throw new InvalidLineException("Invalid name");
 		String date = serviceLine.substring(serviceLine.length() - 8, serviceLine.length());
 		if (!(CheckValidEntry.isValidDate(date))) throw new InvalidLineException("26. Invalid date");
@@ -135,13 +133,13 @@ public class FileChecker {
 		if (serviceLine.charAt(3) != ' ') 
 			throw new InvalidLineException("28. Invalid service line, no space");
 		tokens[1] = serviceNumber;
-		if ((serviceLine.charAt(10) != ' ') || (serviceLine.charAt(11) != '0') || (serviceLine.charAt(12) != ' '))
+		if ((serviceLine.charAt(9) != ' ') || (serviceLine.charAt(10) != '0') || (serviceLine.charAt(11) != ' '))
 			throw new InvalidLineException("29. Invalid service line, no space");
 		tokens[2] = "0";
-		if (serviceLine.substring(13, 18) != "00000" || serviceLine.charAt(18) != ' ') 
+		if (!serviceLine.substring(12, 17).equals("00000") || serviceLine.charAt(17) != ' ') 
 			throw new InvalidLineException("30. Invalid service line");
 		tokens[3] = "00000";
-		tokens[4] = serviceLine.substring(19, serviceLine.length() - 1);
+		tokens[4] = serviceLine.substring(18, serviceLine.length() - 2);
 		if (!(CheckValidEntry.isValidName(tokens[4])) || serviceLine.charAt(serviceLine.length() - 2) != ' ' || serviceLine.charAt(serviceLine.length() - 1) != '0') 
 			throw new InvalidLineException("31. Invalid line");
 		tokens[5] = "0";
@@ -171,6 +169,8 @@ public class FileChecker {
 			tokens[2] += serviceLine.charAt(counter);
 			counter++;
 		}
+		if (!(CheckValidEntry.isValidNumTickets(tokens[2])) || tokens[2].equals("0"))
+			throw new InvalidLineException("33.1 Cannot sell 0 tickets or less");
 		serviceLine = serviceLine.substring(counter + 1, serviceLine.length());
 		if (!serviceLine.equals("00000 **** 0")) 
 			throw new InvalidLineException("34. Invalid service line");
@@ -203,6 +203,8 @@ public class FileChecker {
 			tokens[2] += serviceLine.charAt(counter);
 			counter++;
 		}
+		if (!(CheckValidEntry.isValidNumTickets(tokens[2])) || tokens[2].equals("0"))
+			throw new InvalidLineException("36.1 Cannot cancel 0 tickets or less");
 		serviceLine = serviceLine.substring(counter + 1, serviceLine.length());
 		if (!serviceLine.equals("00000 **** 0")) 
 			throw new InvalidLineException("37. Invalid service line");
@@ -235,6 +237,8 @@ public class FileChecker {
 			tokens[2] += serviceLine.charAt(counter);
 			counter++;
 		}
+		if (!(CheckValidEntry.isValidNumTickets(tokens[2])) || tokens[2].equals("0"))
+			throw new InvalidLineException("36.1 Cannot cancel 0 tickets or less");
 		serviceLine = serviceLine.substring(counter + 1, serviceLine.length());
 		tokens[3] = serviceLine.substring(0, 5);
 		if (!serviceLine.substring(5, serviceLine.length()).equals(" **** 0"));
@@ -242,6 +246,57 @@ public class FileChecker {
 		tokens[5] = "0";
 		return tokens;
 	}
+	
+	
+	private static void createModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		String[] tokens = checkValidCRE(serviceLine);
+		if (centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("40. Duplicate service");
+		centralServicesMapping.put(tokens[1], new ServiceInfo(tokens[1], "30", "0", tokens[4], tokens[5]));
+	}
+	
+	private static void deleteModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		String[] tokens = checkValidDEL(serviceLine);
+		if (!centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("41. Service does not exist");
+		if (!centralServicesMapping.get(tokens[1]).getName().equals(tokens[4])) throw new InvalidLineException("Service names don't match");
+		centralServicesMapping.remove(tokens[1]);
+	}
+	
+	private static void sellModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		String[] tokens = checkValidSEL(serviceLine);
+		if (!centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("42. Service does not exist");
+		ServiceInfo centralServiceObject = centralServicesMapping.get(tokens[1]);
+		int numTicketsSold = Integer.parseInt(tokens[2]);
+		int capacity = Integer.parseInt(centralServiceObject.getCapacity());
+		if (numTicketsSold + Integer.parseInt(centralServiceObject.getNumTicketsSold()) > capacity) throw new InvalidLineException("43. Num tickets sold greater than capacity");
+		centralServiceObject.setNumTicketsSold(Integer.toString(Integer.parseInt(centralServiceObject.getNumTicketsSold()) + numTicketsSold));
+	}
+	
+	private static void cancelModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		String[] tokens = checkValidCAN(serviceLine);
+		if (!centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("44. Service does not exist");
+		ServiceInfo centralServiceObject = centralServicesMapping.get(tokens[1]);
+		int numTicketsCanceled = Integer.parseInt(tokens[2]);
+		int currNumTicketsSold = Integer.parseInt(centralServiceObject.getNumTicketsSold());
+		if (numTicketsCanceled > currNumTicketsSold) throw new InvalidLineException("45. Num tickets canceled greater than current number of tickets sold");
+		centralServiceObject.setNumTicketsSold(Integer.toString(currNumTicketsSold - numTicketsCanceled));
+	}
+	
+	private static void changeModification(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		String[] tokens = checkValidCHG(serviceLine);
+		if (!centralServicesMapping.containsKey(tokens[1]) || !centralServicesMapping.containsKey(tokens[3])) throw new InvalidLineException("46. Service does not exist");
+		ServiceInfo centralServiceObject = centralServicesMapping.get(tokens[1]);
+		ServiceInfo centralServiceDestination = centralServicesMapping.get(tokens[3]);
+		int currNumTicketsSold = Integer.parseInt(centralServiceObject.getNumTicketsSold());
+		int destinationCapacity = Integer.parseInt(centralServiceDestination.getCapacity());
+		int destinationNumTicketsSold = Integer.parseInt(centralServiceDestination.getNumTicketsSold());
+		if (currNumTicketsSold - Integer.parseInt(tokens[2]) < 0 || destinationNumTicketsSold + Integer.parseInt(tokens[2]) > destinationCapacity)
+			throw new InvalidLineException("47. Invalid change");
+		destinationNumTicketsSold += Integer.parseInt(tokens[2]);
+		currNumTicketsSold -= Integer.parseInt(tokens[2]);
+		centralServiceObject.setNumTicketsSold(Integer.toString(currNumTicketsSold));
+		centralServiceDestination.setNumTicketsSold(Integer.toString(destinationNumTicketsSold));
+	}
+	
 	private static void processTransaction(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
 		/*
 		 * method processTransaction : String -> HashMap-> void
@@ -249,68 +304,29 @@ public class FileChecker {
 		 * 	appropriate changes in the HashMap. The HashMap stores the central services details.
 		 * Parameters
 		 * 	String serviceLine: A single line from the Transaction Summary File.
-		 *  HashMap centralServicesMapping: The haspmap containing the central services and its features.
+		 *  HashMap centralServicesMapping: The hash-map containing the central services and its features.
 		 * Throws: InvalidLineException when wrong input is detected from the line.
 		 * Returns: void
 		*/
 		String transactionType = serviceLine.substring(0, 3);
-		String[] tokens;
-		ServiceInfo centralServiceObject;
-		ServiceInfo centralServiceDestination;
-		int numTicketsSold;
-		int numTicketsCanceled;
-		int capacity;
-		int destinationCapacity;
-		int currNumTicketsSold;
-		int destinationNumTicketsSold;
 		switch (transactionType) {
 			case "EOS":
-				tokens = checkValidEOS(serviceLine);
-				System.exit(0);
+				checkValidEOS(serviceLine);
 				break;
 			case "CRE":
-				tokens = checkValidCRE(serviceLine);
-				if (centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("40. Duplicate service");
-				centralServicesMapping.put(tokens[1], new ServiceInfo(tokens[1], tokens[2], "30", tokens[4], tokens[5]));
+				createModification(serviceLine, centralServicesMapping);
 				break;
 			case "DEL":
-				tokens = checkValidDEL(serviceLine);
-				if (!centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("41. Service does not exist");
-				if (!centralServicesMapping.get(tokens[1]).getName().equals(tokens[4])) throw new InvalidLineException("Service names don't match");
-				centralServicesMapping.remove(tokens[1]);
+				deleteModification(serviceLine, centralServicesMapping);
 				break;
 			case "SEL":
-				tokens = checkValidSEL(serviceLine);
-				if (!centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("42. Service does not exist");
-				centralServiceObject = centralServicesMapping.get(tokens[1]);
-				numTicketsSold = Integer.parseInt(tokens[2]);
-				capacity = Integer.parseInt(centralServiceObject.getCapacity());
-				if (numTicketsSold > capacity) throw new InvalidLineException("43. Num tickets sold greater than capacity");
-				centralServiceObject.setNumTicketsSold(Integer.toString(Integer.parseInt(centralServiceObject.getNumTicketsSold()) + numTicketsSold));
+				sellModification(serviceLine, centralServicesMapping);
 				break;
 			case "CAN":
-				tokens = checkValidCAN(serviceLine);
-				if (!centralServicesMapping.containsKey(tokens[1])) throw new InvalidLineException("44. Service does not exist");
-				centralServiceObject = centralServicesMapping.get(tokens[1]);
-				numTicketsCanceled = Integer.parseInt(tokens[2]);
-				currNumTicketsSold = Integer.parseInt(centralServiceObject.getNumTicketsSold());
-				if (numTicketsCanceled > currNumTicketsSold) throw new InvalidLineException("45. Num tickets canceled greater than current number of tickets sold");
-				centralServiceObject.setNumTicketsSold(Integer.toString(currNumTicketsSold - numTicketsCanceled));
+				cancelModification(serviceLine, centralServicesMapping);
 				break;
 			case "CHG":
-				tokens = checkValidCHG(serviceLine);
-				if (!centralServicesMapping.containsKey(tokens[1]) || !centralServicesMapping.containsKey(tokens[3])) throw new InvalidLineException("46. Service does not exist");
-				centralServiceObject = centralServicesMapping.get(tokens[1]);
-				centralServiceDestination = centralServicesMapping.get(tokens[3]);
-				currNumTicketsSold = Integer.parseInt(centralServiceObject.getNumTicketsSold());
-				destinationCapacity = Integer.parseInt(centralServiceDestination.getCapacity());
-				destinationNumTicketsSold = Integer.parseInt(centralServiceDestination.getNumTicketsSold());
-				if (currNumTicketsSold - Integer.parseInt(tokens[2]) < 0 || destinationNumTicketsSold + Integer.parseInt(tokens[2]) > destinationCapacity)
-					throw new InvalidLineException("47. Invalid change");
-				destinationNumTicketsSold += Integer.parseInt(tokens[2]);
-				currNumTicketsSold -= Integer.parseInt(tokens[2]);
-				centralServiceObject.setNumTicketsSold(Integer.toString(currNumTicketsSold));
-				centralServiceDestination.setNumTicketsSold(Integer.toString(destinationNumTicketsSold));
+				changeModification(serviceLine, centralServicesMapping);
 				break;
 			default:
 				throw new InvalidLineException("48. How the hell did you manage to break our frontend????????");

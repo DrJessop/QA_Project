@@ -63,7 +63,7 @@ public class ServiceInfo {
 		 * 	String newNumTicketsSolds: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
 		*/
-		if (CheckValidEntry.isValidNumTicketsSold(newNumTicketsSold))
+		if (CheckValidEntry.isValidNumTickets(newNumTicketsSold))
 			this.numTicketsSold = newNumTicketsSold; 
 	}
 	

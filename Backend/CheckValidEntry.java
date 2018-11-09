@@ -55,7 +55,7 @@ public class CheckValidEntry {
 		return true;
 	}
 	
-	public static boolean isValidNumTicketsSold(String numTicketsSold) throws InvalidLineException {
+	public static boolean isValidNumTickets(String numTicketsSold) throws InvalidLineException {
 		/*
 		 * method isValidNumTicketsSold : String -> boolean
 		 * Functionality: Checks that a given service number was correctly entered
@@ -67,8 +67,8 @@ public class CheckValidEntry {
 		if (numTicketsSold == null) throw new InvalidLineException("7. Null values are not allowed");
 		try {								// Check for valid input and kill transaction if input is not valid
 			int numOfTickets = Integer.parseInt(numTicketsSold);
-			if (numOfTickets > 1000) {     	// Ensure the ticket amount is within the limit
-				throw new InvalidLineException("8. The number of tickets sold is greater than 1000");
+			if (numOfTickets > 1000 || numOfTickets < 0) {     	// Ensure the ticket amount is within the limit
+				throw new InvalidLineException("8. The number of tickets is greater than 1000 or less than 0");
 			} 
 		} catch (NumberFormatException e) {
 			throw new InvalidLineException("9. Tickets entered is not an integer.");
