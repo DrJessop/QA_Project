@@ -9,6 +9,12 @@ import java.util.HashMap;
 public class Main {
 
 	public static void main(String[] args) throws IOException, InvalidLineException {
+		/*
+		 * Functionality: The main class takes the file names, converts the central service file
+		 * 	into a HashMap, makes the changes to the HashMap based on the content in the 
+		 * 	transaction summary file and writes the final changes in two new files: the central services
+		 * 	file and valid services file.
+		 */
 		String centralServicesFile = "centralServicesFile.txt";
 		String mergedTSF = "mergedTransactionSummaryFile.txt";
 		HashMap<String, ServiceInfo> serviceToDataMapping = FileChecker.isCentralServicesValid(centralServicesFile);

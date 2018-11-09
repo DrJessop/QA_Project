@@ -9,6 +9,18 @@ public class ServiceInfo {
 	private String date;
 	
 	public ServiceInfo(String serviceNumber, String capacity, String numTicketsSold, String name, String date) throws InvalidLineException {
+		/*
+		 * Class Name: ServiceInfo
+		 * Functionality: The class contains the parameters for each functioning service.
+		 * Extends: None
+		 * Throws: InvalidLineException (Thrown when invalid input is detected)
+		 * Parameters
+		 *  serviceNumber (The service number)
+		 *  capacity (The capacity of the service)
+		 *  numTicketsSold (The number of tickets sold within the service)
+		 *  name (The name of the service)
+		 *  date (The date of the service)
+		 */		
 		setServiceNumber(serviceNumber);
 		setCapacity(capacity);
 		setNumTicketsSold(numTicketsSold);
@@ -17,15 +29,6 @@ public class ServiceInfo {
 		setDate(date);
 	}
 	
-	/*public ServiceInfo(String serviceNumber, String numTicketsSold, String serviceNumber, String name, String date) throws InvalidLineException {
-		setServiceNumber(serviceNumber);
-		setCapacity(capacity);
-		setNumTicketsSold(numTicketsSold);
-		if (Integer.parseInt(numTicketsSold) > Integer.parseInt(capacity)) throw new InvalidLineException("Invalid service line");
-		setName(name);
-		setDate(date);
-	}*/
-	
 	public void setServiceNumber(String newServiceNumber) throws InvalidLineException{ 
 		/*
 		 * method setServiceNumber : String -> void
@@ -33,6 +36,7 @@ public class ServiceInfo {
 		 * Parameters
 		 * 	String newServiceNumber: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
+		 * Returns: void
 		*/
 		if (CheckValidEntry.isValidServiceNumber(newServiceNumber))
 			this.serviceNumber = newServiceNumber; 
@@ -45,6 +49,7 @@ public class ServiceInfo {
 		 * Parameters
 		 * 	String newCapacity: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
+		 * Returns: void
 		*/
 		if (CheckValidEntry.isValidCapacity(newCapacity))
 			this.capacity = newCapacity; 
@@ -69,6 +74,7 @@ public class ServiceInfo {
 		 * Parameters
 		 * 	String newName: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
+		 * Returns: void
 		*/
 		if (CheckValidEntry.isValidName(newName))
 			this.name = newName; 
@@ -81,11 +87,16 @@ public class ServiceInfo {
 		 * Parameters
 		 * 	String input: User input that will be validated based on specifications
 		 * Throws: InvalidLineException when wrong input is detected
+		 * Returns: void
 		*/
 		if (CheckValidEntry.isValidDate(newDate))
 			this.date = newDate;
 	}
 	
+	/*
+	 * Accessor methods
+	 */
+			
 	public String getServiceNumber() { return this.serviceNumber; }
 	
 	public String getCapacity() { return this.capacity; }
