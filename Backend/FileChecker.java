@@ -6,10 +6,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+/*
+ * Class Name: InvalidLineException
+ * Functionality: Used has a custom extension class that allows us to throw detailed messages.
+ * Extends: Exception
+ * Parameters
+ *  String message (The exception message to be thrown)
+ */
 class InvalidLineException extends Exception {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	public InvalidLineException(String message) {
@@ -17,19 +22,26 @@ class InvalidLineException extends Exception {
 		//System.exit(0);
 	}
 }
-
+/*
+ * Class Name: FileChecker
+ * Functionality: The file checker enables us to parse the central service file and transaction summary file.
+ * 	The central services file is parsed into a hashmap. The hashmap contains the service objects which will be 
+ * 	manipulated based on the contents of the transaction summary file. If an error occurs in the process of 
+ * 	parsing the data, an exception is thrown with a cusomisable message.
+ * Extends: None
+ * Parameters
+ *  None
+ */
 public class FileChecker {
 	
-	private FileChecker() {} 
-
-	//Fill Functions above
 	public static ServiceInfo parseServiceLine(String serviceLine) throws InvalidLineException {
 		/*
-		 * method checkServiceDate : String -> serviceInfo
-		 * Functionality: Parse the string and put the contents into an object
+		 * method parseServiceLine : String -> ServiceInfo
+		 * Functionality: Parse the string and put the contents into an object.
 		 * Parameters
-		 * 	String input: A single line from a service line
-		 * Throws: InvalidLineException when wrong input is detected from service line
+		 * 	String input: A single line from the central summary file.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: ServiceInfo (The contents from a single line in the central service file)
 		*/	
 		int thereBetterBeASpaceHere = serviceLine.length() - 9;
 		if (serviceLine.charAt(5) != ' ' || serviceLine.charAt(thereBetterBeASpaceHere) != ' ' || serviceLine.charAt(thereBetterBeASpaceHere - 1) == ' ') 
@@ -60,12 +72,28 @@ public class FileChecker {
 	}
 	
 	private static String[] checkValidEOS(String serviceLine) throws InvalidLineException {
+		/*
+		 * method checkValidEOS : String -> String[]
+		 * Functionality: Ensure the Transaction Summary File Line starting with EOS is valid.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: tokens (The parsed contents of the input.)
+		*/	
 		if (!(serviceLine.equals("EOS 00000 0 00000 **** 0"))) throw new InvalidLineException("EOS line not correct");
 		String[] tokens = {"EOS", "00000", "0", "00000", "****", "0"};
 		return tokens;
 	}
 	
 	private static String[] checkValidCRE(String serviceLine) throws InvalidLineException {
+		/*
+		 * method checkValidCRE : String -> String[]
+		 * Functionality: Ensure the Transaction Summary File Line starting with CRE is valid.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: tokens (The parsed contents of the input.)
+		*/
 		String[] tokens = new String[6];
 		String serviceNumber = serviceLine.substring(4, 9);
 		if (!(CheckValidEntry.isValidServiceNumber(serviceNumber))) 
@@ -89,6 +117,14 @@ public class FileChecker {
 	}
 	
 	private static String[] checkValidDEL(String serviceLine) throws InvalidLineException {
+		/*
+		 * method checkValidDEL : String -> String[]
+		 * Functionality: Ensure the Transaction Summary File Line starting with DEL is valid.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: tokens (The parsed contents of the input.)
+		*/
 		String[] tokens = new String[6];
 		String serviceNumber = serviceLine.substring(4, 9);
 		if (!(CheckValidEntry.isValidServiceNumber(serviceNumber))) 
@@ -111,6 +147,14 @@ public class FileChecker {
 	}
 	
 	private static String[] checkValidSEL(String serviceLine) throws InvalidLineException {
+		/*
+		 * method checkValidSEL : String -> String[]
+		 * Functionality: Ensure the Transaction Summary File Line starting with SEL is valid.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: tokens (The parsed contents of the input.)
+		*/
 		String[] tokens = new String[6];
 		String serviceNumber = serviceLine.substring(4, 9);
 		if (!(CheckValidEntry.isValidServiceNumber(serviceNumber))) 
@@ -135,6 +179,14 @@ public class FileChecker {
 	}
 	
 	private static String[] checkValidCAN(String serviceLine) throws InvalidLineException {
+		/*
+		 * method checkValidCAN : String -> String[]
+		 * Functionality: Ensure the Transaction Summary File Line starting with CAN is valid.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: tokens (The parsed contents of the input.)
+		*/
 		String[] tokens = new String[6];
 		String serviceNumber = serviceLine.substring(4, 9);
 		if (!(CheckValidEntry.isValidServiceNumber(serviceNumber))) 
@@ -159,6 +211,14 @@ public class FileChecker {
 	}
 	
 	private static String[] checkValidCHG(String serviceLine) throws InvalidLineException {
+		/*
+		 * method checkValidCHG : String -> String[]
+		 * Functionality: Ensure the Transaction Summary File Line starting with CHG is valid.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: tokens (The parsed contents of the input.)
+		*/
 		String[] tokens = new String[6];
 		String serviceNumber = serviceLine.substring(4, 9);
 		if (!(CheckValidEntry.isValidServiceNumber(serviceNumber))) 
@@ -181,7 +241,16 @@ public class FileChecker {
 		return tokens;
 	}
 	private static void processTransaction(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
-		
+		/*
+		 * method processTransaction : String -> HashMap-> void
+		 * Functionality: Reads a line from the transaction summary file and conducts the
+		 * 	appropriate changes in the HashMap. The HashMap stores the central services details.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 *  HashMap centralServicesMapping: The haspmap containing the central services and its features.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: void
+		*/
 		String transactionType = serviceLine.substring(0, 3);
 		String[] tokens;
 		ServiceInfo centralServiceObject;
@@ -247,6 +316,14 @@ public class FileChecker {
 	}
 	
 	public static HashMap<String, ServiceInfo> isCentralServicesValid(String centralServicesFile) throws InvalidLineException, FileNotFoundException, IOException {
+		/*
+		 * method isCentralServicesValid : String -> HashMap
+		 * Functionality: Read the central services file and read it into a hashmap.
+		 * Parameters
+		 * 	String centralServicesFile: The name of the central services file.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: HashMap centralServicesMapping: The haspmap containing the central services and its features.
+		*/
 		HashMap<String, ServiceInfo> serviceToDataMapping = new HashMap<>();
 		String line;
 		String key;
@@ -264,6 +341,16 @@ public class FileChecker {
 	}
 	
 	public static void modifyCentralServicesObject(String tsf, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		/*
+		 * method modifyCentralServicesObject : String -> HashMap -> String[]
+		 * Functionality: The Transaction Summary File is parsed while changes
+		 *  are ServiceInfo objects depending on the transaction read into the program.
+		 * Parameters
+		 * 	String tsf: The Transaction Summary File.
+		 *  HashMap centralServicesMapping: The HashMap of central services
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: void
+		*/
 		try (BufferedReader br = new BufferedReader(new FileReader(tsf))) {
 			String serviceLine;
 			while (!((serviceLine = br.readLine()) == null)) 
