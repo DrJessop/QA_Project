@@ -1,0 +1,289 @@
+		String centralServicesFile = "centralServicesFile.txt";
+		String mergedTSF = "mergedTransactionSummaryFile.txt";
+		HashMap<String, ServiceInfo> serviceToDataMapping = FileChecker.isCentralServicesValid(centralServicesFile);
+		FileChecker.modifyCentralServicesObject(mergedTSF, serviceToDataMapping);
+		String newCentralServicesFile = "newCentralServicesFile.txt";
+		String newValidServicesFile = "newValidServicesFile.txt";
+		ServiceInfo centralServiceObject;
+		String serviceNumber;
+		String capacity;
+		String ticketsSold;
+		String name;
+		String date;
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(newCentralServicesFile))) {
+			for (String key: serviceToDataMapping.keySet()) {
+				centralServiceObject = serviceToDataMapping.get(key);
+				serviceNumber = key;
+				capacity = centralServiceObject.getCapacity();
+				ticketsSold = centralServiceObject.getNumTicketsSold();
+				name = centralServiceObject.getName();
+				date = centralServiceObject.getDate();
+				bw.write(String.format("%s %s %s %s %s\n", serviceNumber, capacity, ticketsSold, name, date));
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(newValidServicesFile))) {
+			for (String key: serviceToDataMapping.keySet()) 
+				bw.write(String.format("%s\n", key));
+			bw.write("00000");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}	
+
+}
+	
+private static String[] checkValidCAN(String serviceLine) throws InvalidLineException {
+		/*
+		 * method checkValidCAN : String -> String[]
+		 * Functionality: Ensure the Transaction Summary File Line starting with CAN is valid.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: tokens (The parsed contents of the input.)
+		*/
+		String[] tokens = new String[6];
+		String serviceNumber = serviceLine.substring(4, 9);
+		if (!(CheckValidEntry.isValidServiceNumber(serviceNumber))) 
+
+
+	public static boolean isValidServiceNumber(String serviceNumber) throws InvalidLineException {
+		/*
+		 * method isValidServiceNumber : String -> boolean
+		 * Functionality: Checks that a given service number was correctly entered
+		 * Parameters
+		 * 	String serviceNumber: User input that will be validated based on specifications
+		 * Throws: InvalidLineException when wrong input is detected
+		 * Returns: true (If value is a valid entry)
+		*/
+		if (serviceNumber == null) throw new InvalidLineException("1. Null values are not allowed");
+		try {
+			Integer.parseInt(serviceNumber);
+			if ((serviceNumber.length() != 5) || (serviceNumber.charAt(0) == '0')) {
+				throw new InvalidLineException("2. Invalid Input: The service number is not valid.");
+			}
+		} catch (NumberFormatException e) {
+			throw new InvalidLineException("3. The service number you have entered is not a number.");
+		}
+		return true;
+	}
+
+
+			throw new InvalidLineException("35. Invalid service number");
+		tokens[0] = "CAN";
+		if (serviceLine.charAt(3) != ' ' || serviceLine.charAt(9) != ' ') 
+			throw new InvalidLineException("36. Invalid service line, no space");
+		tokens[1] = serviceNumber;
+		int counter = 10;
+		tokens[2] = "";
+		while (serviceLine.charAt(counter) != ' ' && counter < 68) {
+			tokens[2] += serviceLine.charAt(counter);
+			counter++;
+		}
+		if (!(CheckValidEntry.isValidNumTickets(tokens[2])) 
+	public static boolean isValidNumTickets(String numTicketsSold) throws InvalidLineException {
+		/*
+		 * method isValidNumTicketsSold : String -> boolean
+		 * Functionality: Checks that a given service number was correctly entered
+		 * Parameters
+		 * 	String newServiceNumber: User input that will be validated based on specifications
+		 * Throws: InvalidLineException when wrong input is detected
+		 * Returns: true (If value is a valid entry)
+		*/
+		if (numTicketsSold == null) throw new InvalidLineException("7. Null values are not allowed");
+		try {								// Check for valid input and kill transaction if input is not valid
+			int numOfTickets = Integer.parseInt(numTicketsSold);
+			if (numOfTickets > 1000 || numOfTickets < 0) {     	// Ensure the ticket amount is within the limit
+				throw new InvalidLineException("8. The number of tickets is greater than 1000 or less than 0");
+			} 
+		} catch (NumberFormatException e) {
+			throw new InvalidLineException("9. Tickets entered is not an integer.");
+		}
+		return true;
+	}
+
+|| tokens[2].equals("0"))
+			throw new InvalidLineException("36.1 Cannot cancel 0 tickets or less");
+		serviceLine = serviceLine.substring(counter + 1, serviceLine.length());
+		if (!serviceLine.equals("00000 **** 0")) 
+			throw new InvalidLineException("37. Invalid service line");
+		tokens[3] = "00000";
+		tokens[4] = "****";
+		tokens[5] = "0";
+		return tokens;
+	}
+
+	private static String[] checkValidCRE(String serviceLine) throws InvalidLineException {
+		/*
+		 * method checkValidCRE : String -> String[]
+		 * Functionality: Ensure the Transaction Summary File Line starting with CRE is valid.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: tokens (The parsed contents of the input.)
+		*/
+		String[] tokens = new String[6];
+		String serviceNumber = serviceLine.substring(4, 9);
+		if (!(CheckValidEntry.isValidServiceNumber(serviceNumber))) 
+
+	public static boolean isValidServiceNumber(String serviceNumber) throws InvalidLineException {
+		/*
+		 * method isValidServiceNumber : String -> boolean
+		 * Functionality: Checks that a given service number was correctly entered
+		 * Parameters
+		 * 	String serviceNumber: User input that will be validated based on specifications
+		 * Throws: InvalidLineException when wrong input is detected
+		 * Returns: true (If value is a valid entry)
+		*/
+		if (serviceNumber == null) throw new InvalidLineException("1. Null values are not allowed");
+		try {
+			Integer.parseInt(serviceNumber);
+			if ((serviceNumber.length() != 5) || (serviceNumber.charAt(0) == '0')) {
+				throw new InvalidLineException("2. Invalid Input: The service number is not valid.");
+			}
+		} catch (NumberFormatException e) {
+			throw new InvalidLineException("3. The service number you have entered is not a number.");
+		}
+		return true;
+	}
+
+
+
+			throw new InvalidLineException("22. Invalid service number");
+		tokens[0] = "CRE";
+		if (serviceLine.charAt(3) != ' ') 
+			throw new InvalidLineException("23. Invalid service line, no space");
+		tokens[1] = serviceNumber;
+		if ((serviceLine.charAt(9) != ' ') || (serviceLine.charAt(10) != '0') || (serviceLine.charAt(11) != ' '))
+			throw new InvalidLineException("24. Invalid service line, no space");
+		tokens[2] = "0";
+		if (!serviceLine.substring(12, 17).equals("00000") || serviceLine.charAt(17) != ' ') 
+			throw new InvalidLineException("25. Invalid service line");
+		tokens[3] = "00000";
+		tokens[4] = serviceLine.substring(18, serviceLine.length() - 9);
+		if (!(CheckValidEntry.isValidName(tokens[4])) || serviceLine.charAt(serviceLine.length() - 9) != ' ') throw new InvalidLineException("Invalid name");
+		String date = serviceLine.substring(serviceLine.length() - 8, serviceLine.length());
+		if (!(CheckValidEntry.isValidDate(date))) throw new InvalidLineException("26. Invalid date");
+	public static boolean isValidDate(String date) throws InvalidLineException {
+		/*
+		 * method isValidDate : String -> boolean
+		 * Functionality: Checks that a given date was correctly entered
+		 * Parameters
+		 * 	String date: User input that will be validated based on specifications
+		 * Throws: InvalidLineException when wrong input is detected
+		 * Returns: true (If value is a valid entry)
+		*/
+		if (date == null) throw new InvalidLineException("13. Null values are not allowed");
+		try {
+			Integer.parseInt(date);
+		} catch (NumberFormatException e) {
+			throw new InvalidLineException("14. The date you entered contains non-numeric characters.");
+		}
+		if (date.length() != 8) {
+			throw new InvalidLineException("15. The date you entered is not of length 8.");
+		} else if ((Integer.parseInt(date.substring(0,4)) < 1980) || (Integer.parseInt(date.substring(0,4)) > 2999)) {
+			throw new InvalidLineException("16. The year is invalid.");
+		} else if ((Integer.parseInt(date.substring(4,6)) < 1) || (Integer.parseInt(date.substring(4,6)) > 12)) {
+			throw new InvalidLineException("17. The month is invalid.");
+		} else if ((Integer.parseInt(date.substring(6,8)) < 1) || (Integer.parseInt(date.substring(6,8)) > 31)) {
+			throw new InvalidLineException("18. The day is invalid.");
+		}
+		return true;
+	}
+}		
+
+
+		tokens[5] = date;
+		return tokens;
+	}
+
+	private static void processTransaction(String serviceLine, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		/*
+		 * method processTransaction : String -> HashMap-> void
+		 * Functionality: Reads a line from the transaction summary file and conducts the
+		 * 	appropriate changes in the HashMap. The HashMap stores the central services details.
+		 * Parameters
+		 * 	String serviceLine: A single line from the Transaction Summary File.
+		 *  HashMap centralServicesMapping: The hash-map containing the central services and its features.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: void
+		*/
+		String transactionType = serviceLine.substring(0, 3);
+		switch (transactionType) {
+			case "EOS":
+				checkValidEOS(serviceLine);
+				break;
+			case "CRE":
+				createModification(serviceLine, centralServicesMapping);
+				break;
+			case "DEL":
+				deleteModification(serviceLine, centralServicesMapping);
+				break;
+			case "SEL":
+				sellModification(serviceLine, centralServicesMapping);
+				break;
+			case "CAN":
+				cancelModification(serviceLine, centralServicesMapping);
+				break;
+			case "CHG":
+				changeModification(serviceLine, centralServicesMapping);
+				break;
+			default:
+				throw new InvalidLineException("48. How the hell did you manage to break our frontend????????");
+		}
+	}
+	
+	public static HashMap<String, ServiceInfo> isCentralServicesValid(String centralServicesFile) throws InvalidLineException, FileNotFoundException, IOException {
+		/*
+		 * method isCentralServicesValid : String -> HashMap
+		 * Functionality: Read the central services file and read it into a hashmap.
+		 * Parameters
+		 * 	String centralServicesFile: The name of the central services file.
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: HashMap centralServicesMapping: The haspmap containing the central services and its features.
+		*/
+		HashMap<String, ServiceInfo> serviceToDataMapping = new HashMap<>();
+		String line;
+		String key;
+		try (BufferedReader br = new BufferedReader(new FileReader(centralServicesFile))) {
+			while (!((line = br.readLine()) == null)) {
+				key = line.substring(0, 5);
+				if (serviceToDataMapping.containsKey(key)) throw new InvalidLineException("49. Invalid service");
+				serviceToDataMapping.put(key, FileChecker.parseServiceLine(line));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return serviceToDataMapping;
+	}
+	
+	public static void modifyCentralServicesObject(String tsf, HashMap<String, ServiceInfo> centralServicesMapping) throws InvalidLineException {
+		/*
+		 * method modifyCentralServicesObject : String -> HashMap -> String[]
+		 * Functionality: The Transaction Summary File is parsed while changes
+		 *  are ServiceInfo objects depending on the transaction read into the program.
+		 * Parameters
+		 * 	String tsf: The Transaction Summary File.
+		 *  HashMap centralServicesMapping: The HashMap of central services
+		 * Throws: InvalidLineException when wrong input is detected from the line.
+		 * Returns: void
+		*/
+		try (BufferedReader br = new BufferedReader(new FileReader(tsf))) {
+			String serviceLine;
+			while (!((serviceLine = br.readLine()) == null)) 
+				processTransaction(serviceLine, centralServicesMapping);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
