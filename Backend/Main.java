@@ -36,7 +36,7 @@ public class Main {
 				capacity = centralServiceObject.getCapacity();
 				ticketsSold = centralServiceObject.getNumTicketsSold();
 				name = centralServiceObject.getName();
-				date = centralServiceObject.getDate();
+				date = centralServiceObject.getDate(); System.out.println(String.format("%s %s %s %s %s\n", serviceNumber, capacity, ticketsSold, name, date));
 				bw.write(String.format("%s %s %s %s %s\n", serviceNumber, capacity, ticketsSold, name, date));
 			}
 		} catch (FileNotFoundException e) {
