@@ -17,12 +17,12 @@ public class Main {
 		 *  easier, so you will need to have centralServicesFile.txt and mergedTransactionSummaryFile.txt in your
 		 *  current directory in order to run. 
 		 */
-		String centralServicesFile = "centralServicesFile.txt";
-		String mergedTSF = "mergedTransactionSummaryFile.txt";
+		String centralServicesFile = args[0];
+		String mergedTSF = args[1];
 		HashMap<String, ServiceInfo> serviceToDataMapping = FileChecker.isCentralServicesValid(centralServicesFile);
 		FileChecker.modifyCentralServicesObject(mergedTSF, serviceToDataMapping);
-		String newCentralServicesFile = "newCentralServicesFile.txt";
-		String newValidServicesFile = "newValidServicesFile.txt";
+		String newCentralServicesFile = args[2];
+		String newValidServicesFile = args[3];
 		ServiceInfo centralServiceObject;
 		String serviceNumber;
 		String capacity;
