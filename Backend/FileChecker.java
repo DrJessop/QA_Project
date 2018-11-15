@@ -374,7 +374,7 @@ public class FileChecker {
 				changeModification(serviceLine, centralServicesMapping);
 				break;
 			default:
-				throw new InvalidLineException("48. How the hell did you manage to break our frontend????????");
+				System.out.println("Test Two " + transactionType); throw new InvalidLineException("48. How the hell did you manage to break our frontend????????");
 		}
 	}
 	
